@@ -10,9 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isDrawing = false;
 
-    // Define the colors and the current color index
-    const colors = ["red", "#fc3b00", "#c1fc00", "#5000fc", "indigo", "#ff7393", "black"];
-    let colorIndex = 0;
+  // Define the colors and the current color index
+  const colors = [
+    "red",
+    "#fc3b00",
+    "#c1fc00",
+    "#5000fc",
+    "green",
+    "#ff7393",
+    "lightgray",
+  ];
+  let colorIndex = 0;
 
   // Event listeners
   canvas.addEventListener("mousedown", startDrawing);
@@ -20,12 +28,35 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("mouseup", stopDrawing);
   canvas.addEventListener("mouseleave", stopDrawing);
 
+  // function startDrawing(event) {
+  //   isDrawing = true;
+  //   // Increment the color index
+  //   colorIndex = (colorIndex + 1) % colors.length;
+  //   ctx.beginPath();
+
+  // }
+
   function startDrawing(event) {
     isDrawing = true;
-        // Increment the color index
-    colorIndex = (colorIndex + 1) % colors.length;
-  }
 
+    // Increment the color index
+    // colorIndex = (colorIndex + 1) % colors.length;
+
+    // Generate a random index
+    colorIndex = Math.floor(Math.random() * colors.length);
+
+    const x = event.clientX - canvas.offsetLeft;
+    const y = event.clientY - canvas.offsetTop;
+
+    ctx.lineWidth = 60;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = colors[colorIndex];
+    ctx.shadowBlur = 30;
+    ctx.shadowColor = colors[colorIndex];
+
+    ctx.beginPath();
+    ctx.stroke();
+  }
 
   function draw(event) {
     if (!isDrawing) return;
@@ -35,13 +66,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const y = event.clientY - canvas.offsetTop;
 
     // Draw on the canvas
-    ctx.lineWidth = 35;
+    ctx.lineWidth = 60;
     ctx.lineCap = "round";
     ctx.strokeStyle = colors[colorIndex]; // Change this value to adjust the stroke color
-    ctx.shadowBlur = 20; // Change this value to adjust the amount of blur
+    ctx.shadowBlur = 30; // Change this value to adjust the amount of blur
     ctx.shadowColor = colors[colorIndex]; // Change this value to adjust the shadow color
     ctx.lineTo(x, y);
     ctx.stroke();
+
+    ctx.lineWidth = 60;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = colors[colorIndex]; // Solid stroke color for the line
+    ctx.shadowBlur = 30; // No shadow for the line
+    ctx.shadowColor = colors[colorIndex];
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
     ctx.beginPath();
     ctx.moveTo(x, y);
   }
