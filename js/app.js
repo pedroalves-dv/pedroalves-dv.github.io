@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
-  // // Set canvas size
+  // Set canvas size
   // canvas.width = window.innerWidth * 0.8; // 80% of the window width
   // canvas.height = window.innerHeight * 0.8; // 80% of the window height
+  
   // Set canvas size
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // function startDrawing(event) {
   //   isDrawing = true;
-  //   // Increment the color index
+  // Increment the color index
   //   colorIndex = (colorIndex + 1) % colors.length;
   //   ctx.beginPath();
 
