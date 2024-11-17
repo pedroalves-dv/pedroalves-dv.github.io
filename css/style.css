@@ -58,19 +58,35 @@ main {
 
 a {
   background-color: transparent;
-  background: none;
+  color: inherit;
   pointer-events: auto;
   display: inline-block;
-  margin-bottom: 1rem;
+  padding: 1rem;
   text-decoration: none;
-  color: inherit;
+  /* color: inherit; */
   transition: transform 0.5s ease, letter-spacing 0.3s ease, font-style 0.3s ease;
+}
+
+a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 60px;
+  /* background-color: var(--smudge-color); */
+  filter: blur(30px); /* Adjust the blur radius as needed */
+  z-index: -1; /* Ensure the smudge is behind the text */
+  border-radius: 90%;
+  /* box-shadow: 0 0 0 30px var(--smudge-color);  */
 }
 
 
 
+
+
 a:hover {
-  font-style: italic;
   text-decoration: underline;
 }
 
