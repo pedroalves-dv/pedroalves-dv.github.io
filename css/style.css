@@ -47,7 +47,6 @@ a {
   position: absolute;
   top: 0;
   left: 0;
-  outline: 1px solid green;
 }
 
 a::before {
