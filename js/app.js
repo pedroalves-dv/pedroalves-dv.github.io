@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
      // Function to position links using a grid system
-  function positionLinksUsingGrid(excludeLink) {
+  function positionLinksUsingGrid(excludeLink = null) {
     const gridCellWidth = 150; // Approximate width of links
     const gridCellHeight = 100; // Approximate height of links
     const paddingX = 100; // Left and right padding (space around the edges)
@@ -106,7 +106,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize the grid with false values (no links placed yet)
     const grid = Array.from({ length: rows }, () => Array(columns).fill(false));
 
+     // Mark the hovered link's position as occupied if it exists
+     if (excludeLink) {
+      const rect = excludeLink.getBoundingClientRect();
+      const col = Math.floor((rect.left - paddingX) / gridCellWidth);
+      const row = Math.floor((rect.top - paddingY) / gridCellHeight);
 
+      if (row >= 0 && row < rows && col >= 0 && col < columns) {
+        grid[row][col] = true;
+      }
+    }
     
     allLinks.forEach((link) => {
       if (link === excludeLink) return; // Skip the hovered link
@@ -136,16 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Move links on hover
   allLinks.forEach((link) => {
     link.addEventListener("mouseover", () => {
-      positionLinksUsingGrid(link); // Reposition all links using the grid
+      positionLinksUsingGrid(link);
       
-      allLinks.forEach((otherLink) => {
-        if (otherLink !== link) {  // Apply the blur only to non-hovered links
-          otherLink.style.transition = "transform 1.2s ease";
-          otherLink.style.filter = "blur(2px)";
-        } else {
-          otherLink.style.filter = ""; // Ensure the hovered link is not blurred
-        }
-      });
+      link.style.filter = "none";
     });
 
     link.addEventListener("mouseout", () => {
