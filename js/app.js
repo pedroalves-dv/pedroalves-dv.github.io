@@ -1,9 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
-  // Set canvas size
-  // canvas.width = window.innerWidth * 0.8; // 80% of the window width
-  // canvas.height = window.innerHeight * 0.8; // 80% of the window height
 
   // Set canvas size
   canvas.width = window.innerWidth;
@@ -29,19 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("mouseup", stopDrawing);
   canvas.addEventListener("mouseleave", stopDrawing);
 
-  // function startDrawing(event) {
-  //   isDrawing = true;
-  // Increment the color index
-  //   colorIndex = (colorIndex + 1) % colors.length;
-  //   ctx.beginPath();
-
-  // }
-
   function startDrawing(event) {
     isDrawing = true;
-
-    // Increment the color index
-    // colorIndex = (colorIndex + 1) % colors.length;
 
     // Generate a random index
     colorIndex = Math.floor(Math.random() * colors.length);
@@ -90,108 +76,82 @@ document.addEventListener("DOMContentLoaded", () => {
   function stopDrawing() {
     isDrawing = false;
     ctx.beginPath(); // Start a new path
-  }
-});
+  }});
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
+  document.addEventListener("DOMContentLoaded", () => {
+    
+    const allLinks = document.querySelectorAll("a");
 
-  // Set canvas size
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+    // Log all links and their text content
+    console.log("All links:", allLinks);
+    console.log("Number of links:", allLinks.length);
+    allLinks.forEach((link) => console.log(link.textContent));
+    
 
-  let isDrawing = false;
+     // Function to position links using a grid system
+  function positionLinksUsingGrid(excludeLink) {
+    const gridCellWidth = 150; // Approximate width of links
+    const gridCellHeight = 100; // Approximate height of links
+    const paddingX = 100; // Left and right padding (space around the edges)
+    const paddingY = 50; // Top and bottom padding (space around the edges)
 
-  // Define colors for drawing
-  const colors = ["red", "#fc3b00", "#c1fc00", "#5000fc", "green", "#ff7393", "lightgray"];
-  let colorIndex = 0;
+    // Calculate available space excluding the padding zone
+    const usableWidth = window.innerWidth - paddingX;
+    const usableHeight = window.innerHeight - paddingY;
 
-  // Event listeners for drawing
-  canvas.addEventListener("mousedown", startDrawing);
-  canvas.addEventListener("mousemove", draw);
-  canvas.addEventListener("mouseup", stopDrawing);
-  canvas.addEventListener("mouseleave", stopDrawing);
+    const columns = Math.floor(usableWidth / gridCellWidth);
+    const rows = Math.floor(usableHeight / gridCellHeight);
 
-  function startDrawing(event) {
-    isDrawing = true;
-    colorIndex = Math.floor(Math.random() * colors.length);
-    ctx.beginPath();
-    ctx.strokeStyle = colors[colorIndex];
-    ctx.lineWidth = 60;
-    ctx.lineCap = "round";
-    ctx.shadowBlur = 30;
-    ctx.shadowColor = `rgba(${hexToRgb(colors[colorIndex])}, 0.5)`;
-  }
+    // Initialize the grid with false values (no links placed yet)
+    const grid = Array.from({ length: rows }, () => Array(columns).fill(false));
 
-  function draw(event) {
-    if (!isDrawing) return;
-    const x = event.clientX - canvas.offsetLeft;
-    const y = event.clientY - canvas.offsetTop;
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.moveTo(x, y);
-  }
 
-  function stopDrawing() {
-    isDrawing = false;
-    ctx.beginPath();
-  }
+    
+    allLinks.forEach((link) => {
+      if (link === excludeLink) return; // Skip the hovered link
 
-  function hexToRgb(hex) {
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return `${r}, ${g}, ${b}`;
+      let placed = false;
+      while (!placed) {
+        const randomCol = Math.floor(Math.random() * columns);
+        const randomRow = Math.floor(Math.random() * rows);
+
+        if (!grid[randomRow][randomCol]) {
+          grid[randomRow][randomCol] = true;
+
+          const randomX = paddingX + randomCol * gridCellWidth;
+          const randomY = paddingY + randomRow * gridCellHeight;
+
+          link.style.transform = `translate(${randomX}px, ${randomY}px)`;
+
+          placed = true;
+        }
+      }
+    });
   }
 
-  // Link hover animation and random positioning
-  const allLinks = document.querySelectorAll("a");
+  // Initial positioning using the grid
+  positionLinksUsingGrid();
 
-  // Set initial random positions
-  allLinks.forEach(link => {
-    const randomX = Math.floor(Math.random() * 300) - 150; // Random X between -150px and 150px
-    const randomY = Math.floor(Math.random() * 300) - 150; // Random Y between -150px and 150px
-    link.style.transform = `translate(${randomX}px, ${randomY}px)`;
-  });
-
-  allLinks.forEach((link, index) => {
+  // Move links on hover
+  allLinks.forEach((link) => {
     link.addEventListener("mouseover", () => {
-      link.style.zIndex = 10; // Bring the hovered link to the front
-      const randomColor = getRandomVividColor();
-      link.style.setProperty('--smudge-color', randomColor);
-
-      // Move other links to random positions within container
-      allLinks.forEach((otherLink, otherIndex) => {
-        if (otherIndex !== index) {
-          const randomX = Math.floor(Math.random() * 350) - 175; // Random X between -175px and 175px
-          const randomY = Math.floor(Math.random() * 350) - 175; // Random Y between -175px and 175px
-          otherLink.style.transition = "transform 0.6s ease";
-          otherLink.style.transform = `translate(${randomX}px, ${randomY}px)`;
+      positionLinksUsingGrid(link); // Reposition all links using the grid
+      
+      allLinks.forEach((otherLink) => {
+        if (otherLink !== link) {  // Apply the blur only to non-hovered links
+          otherLink.style.transition = "transform 1.2s ease";
           otherLink.style.filter = "blur(2px)";
+        } else {
+          otherLink.style.filter = ""; // Ensure the hovered link is not blurred
         }
       });
     });
 
     link.addEventListener("mouseout", () => {
-      link.style.zIndex = ""; // Reset z-index
       allLinks.forEach((otherLink) => {
         otherLink.style.filter = ""; // Remove blur effect
       });
     });
   });
 });
-// Function to generate random letter spacing for hover effect
-function getRandomLetterSpacing() {
-  return Math.floor(Math.random() * 20) + 1; // Random letter-spacing between 1px and 6px
-}
-
-// Function to get a random vivid color
-function getRandomVividColor() {
-  const colors = ["#de2a2a", "#3bd43b", "#3232d1", "#ffff2b", "#3e1ba8", "#1ee3e3"];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
-
