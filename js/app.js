@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
      // Function to position links using a grid system
   function positionLinksUsingGrid(excludeLink = null) {
     const gridCellWidth = 150; // Approximate width of links
-    const gridCellHeight = 100; // Approximate height of links
+    const gridCellHeight = 75; // Approximate height of links
     const paddingX = 100; // Left and right padding (space around the edges)
     const paddingY = 50; // Top and bottom padding (space around the edges)
 
