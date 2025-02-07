@@ -1,5 +1,6 @@
-/* reset css */
 
+
+/* reset css */
 * {
   box-sizing: border-box;
   font-size: 14px;
@@ -7,11 +8,27 @@
   padding: 0;
 }
 
+/* Define light mode (default) */
+:root {
+  --bg-color: white;
+  --text-color: black;
+}
+
+/* Define dark mode */
+.dark-mode {
+  --bg-color: #222;
+  --text-color: white;
+}
+
 /* setup */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
 
 html, body {
   font-family: "Roboto", sans-serif;
-  background-color: transparent;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -24,20 +41,85 @@ html, body {
 
 main {
   pointer-events: none;
-  
-  /* display: flex;
-  flex-direction: column;
-  align-items: flex-start; */
-  /* width: 100%;
-  height: 100%; */
   margin: 0;
   padding: 0;
-  outline: 1px solid red;
 }
+
+
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+
+/* Hide the actual checkbox */
+.checkbox {
+  opacity: 0;
+  position: absolute;
+}
+
+/* Style the switch */
+.checkbox-label {
+  background-color: #111;
+  width: 38px;
+  height: 20px;
+  border-radius: 50px;
+  position: relative;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 7px #d6d5d5;
+}
+
+.checkbox-label .ball {
+  background-color: #fff;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+}
+
+/* Move the ball to the right when checked */
+.checkbox:checked + .checkbox-label .ball {
+  transform: translateX(18px);
+}
+
+/* Dark mode toggle button */
+.dark-mode .checkbox-label {
+  background-color: white; /* Light background for dark mode */
+}
+
+.dark-mode .checkbox-label .ball {
+  background-color: black; /* Dark ball for contrast */
+}
+
+/* Dark mode styles */
+.dark-mode {
+  background-color: #222; /* Dark background */
+  color: white; /* White text */
+}
+
+.dark-mode a {
+  color: white; /* Make links white */
+}
+
+.dark-mode a::before {
+  background-color: rgba(255, 255, 255, 0.3); /* Adjust blur effect */
+  box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
 
 a {
   background-color: transparent;
-  color: inherit;
+  color: var(--text-color);
   pointer-events: auto;
   display: inline-block;
   text-align: center;
@@ -50,19 +132,7 @@ a {
   left: 0;
 }
 
-a::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  filter: blur(30px);
-  z-index: -10; 
-  border-radius: 50%;
-  box-shadow: 0 0 0 30px white;
-}
+
 
 a:hover {
   text-decoration: underline;
@@ -80,4 +150,74 @@ canvas {
   height: 100%;
   background-color: transparent;
   background: none;
+}
+
+/* Vertical layout mode */
+body.vertical-layout main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Aligns links to the right */
+  position: absolute;
+  right: 10%;
+  top: 20%;
+}
+
+body.vertical-layout a {
+  position: relative; /* Allow proper stacking */
+  display: block;
+  text-align: right;
+  padding: .5rem;
+  width: fit-content;
+  transition: none;
+  overflow: hidden;
+}
+
+
+
+/* Preview box */
+.preview-box {
+  width: 710px; /* The fixed preview box size */
+  height: 394px;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  overflow: hidden;
+  display: none;
+  z-index: 9999;
+}
+
+.preview-box iframe {
+  width: 1920px; /* Keep full HD resolution */
+  height: 1080px;
+  border: none;
+  transform: scale(0.37); /* Scale down to fit within 700px width */
+  transform-origin: top left;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+#layoutToggle {
+  background-color: white;
+  position: absolute;
+  top: 20px;
+  left: 80px;
+  z-index: 100;
+  border: none;
+  height: 20px;
+  width: 62px;
+  border: 1px solid white;
+  border-radius: 50px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: -.1px;
+  box-shadow: 0 0 7px #d6d5d5;
+}
+
+.github-arrow {
+  display: none;
 }
