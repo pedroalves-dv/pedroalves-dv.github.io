@@ -387,4 +387,125 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelector(".github-arrow").style.display = "none";
     });
   });
+
+  
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const screensaver = document.createElement("canvas");
+  screensaver.id = "screensaver";
+  screensaver.style.position = "fixed";
+  screensaver.style.top = "0";
+  screensaver.style.left = "0";
+  screensaver.style.width = "100vw";
+  screensaver.style.height = "100vh";
+  screensaver.style.display = "none";
+  screensaver.style.zIndex = "9999";
+  document.body.appendChild(screensaver);
+  // screensaver.style.imageRendering = "pixelated";
+
+  const ctx = screensaver.getContext("2d");
+
+  let timeout;
+  let isScreensaverActive = false;
+
+  const box = {
+      x: Math.random() * (window.innerWidth - 50),
+      y: Math.random() * (window.innerHeight - 50),
+      size: 50,
+      dx: (Math.random() > 0.5 ? 1 : -1) * 2,
+      dy: (Math.random() > 0.5 ? 1 : -1) * 2
+  };
+
+  function drawLogo(ctx, x, y, scale = 1) {
+    ctx.clearRect(0, 0, screensaver.width, screensaver.height);
+
+    const ovalWidth = 150 * scale;
+    const ovalHeight = 60 * scale;
+
+    // === OVAL (Outer Border) ===
+    ctx.beginPath();
+    ctx.ellipse(x, y, ovalWidth, ovalHeight, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = "white"; // Border color
+    ctx.lineWidth = 4 * scale;
+    ctx.stroke();
+
+    // === "SUPER WEBSITE" TEXT ===
+    ctx.font = `${22 * scale}px 'Press Start 2P', sans-serif`; // Pixel-style font
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle"; // Centers text in the oval
+    ctx.fillText("VERY COOL", x, y);
+}
+
+// === Update Bounce Logic to Fit the Oval ===
+function updateScreensaver() {
+    if (!isScreensaverActive) return;
+
+    ctx.clearRect(0, 0, screensaver.width, screensaver.height);
+
+    const ovalWidth = 150;  // Half of the actual width
+    const ovalHeight = 60;  // Half of the actual height
+
+    // Move the logo
+    box.x += box.dx;
+    box.y += box.dy;
+
+    // Bounce off edges using the actual oval size
+    if (box.x - ovalWidth <= 0 || box.x + ovalWidth >= screensaver.width) {
+        box.dx *= -1;
+    }
+    if (box.y - ovalHeight <= 0 || box.y + ovalHeight >= screensaver.height) {
+        box.dy *= -1;
+    }
+
+    // Draw the logo
+    drawLogo(ctx, box.x, box.y);
+
+    requestAnimationFrame(updateScreensaver);
+}
+
+  function showScreensaver() {
+      isScreensaverActive = true;
+      screensaver.width = window.innerWidth;
+      screensaver.height = window.innerHeight;
+      screensaver.style.display = "block";
+
+      // Hide UI elements
+        document.getElementById("main").style.display = "none";
+        document.getElementById("layoutToggle").style.display = "none";
+        document.getElementById("darkmode").style.display = "none";
+      updateScreensaver();
+  }
+
+  function hideScreensaver() {
+      isScreensaverActive = false;
+      screensaver.style.display = "none";
+
+      // Show UI elements
+      document.getElementById("main").style.display = "inline-block";
+      document.getElementById("layoutToggle").style.display = "inline-block";
+      document.getElementById("darkmode").style.display = "inline-block";
+      resetScreensaverTimer();
+  }
+
+  function resetScreensaverTimer() {
+      clearTimeout(timeout);
+      if (isScreensaverActive) hideScreensaver();
+      timeout = setTimeout(showScreensaver, 25000); // 1-minute delay
+  }
+
+  // Reset timer on user activity
+  ["mousemove", "keydown", "click", "scroll"].forEach(event => {
+      document.addEventListener(event, resetScreensaverTimer);
+  });
+
+  // Responsive resizing
+  window.addEventListener("resize", () => {
+      screensaver.width = window.innerWidth;
+      screensaver.height = window.innerHeight;
+  });
+
+  resetScreensaverTimer();
+});
+

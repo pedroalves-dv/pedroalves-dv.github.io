@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 /* reset css */
 * {
@@ -73,7 +73,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 7px #d6d5d5;
+  box-shadow: 0 0 3px #d6d5d5;
 }
 
 .checkbox-label .ball {
@@ -215,7 +215,7 @@ body.vertical-layout a {
   cursor: pointer;
   font-weight: bold;
   letter-spacing: -.1px;
-  box-shadow: 0 0 7px #d6d5d5;
+  box-shadow: 0 0 3px #d6d5d5;
 }
 
 .github-arrow {
