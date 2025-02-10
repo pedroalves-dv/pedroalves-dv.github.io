@@ -164,7 +164,7 @@ body.vertical-layout a {
 /* Preview box */
 .preview-box {
   width: 40.1vw; /* The fixed preview box size */
-  height: 47.5vh;
+  height: 46vh;
   position: fixed;
   top: 40%;
   left: 50%;
