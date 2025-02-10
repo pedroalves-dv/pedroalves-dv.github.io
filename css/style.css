@@ -175,6 +175,16 @@ body.vertical-layout a {
   border: 1px solid black;
 }
 
+.preview-box .loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: #000;
+  display: none;
+}
+
 .preview-box iframe {
   width: 1920px; /* Keep full HD resolution */
   height: 1080px;

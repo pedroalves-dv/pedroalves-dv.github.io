@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector(".github-arrow").style.display = "inline-block";
       } else {
         // 🌍 Show iframe preview for normal websites
-        previewBox.innerHTML = `<iframe src="${previewUrl}"></iframe>`;
+        previewBox.innerHTML = `<iframe src="${previewUrl}" loading="lazy"></iframe>`;
         previewBox.style.display = "block";
       }
     });
