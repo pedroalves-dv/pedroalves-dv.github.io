@@ -82,14 +82,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("DOMContentLoaded", () => {
     const toggleSwitch = document.getElementById("checkbox");
     const body = document.body;
+    const layoutToggle = document.getElementById("layoutToggle");
   
     // Check if dark mode is stored in localStorage
     if (localStorage.getItem("dark-mode") === "disabled") {
       body.classList.remove("dark-mode");
+      layoutToggle.classList.remove("dark-mode");
       toggleSwitch.checked = false;
     } else {
       // Default to dark mode
       body.classList.add("dark-mode");
+      layoutToggle.classList.add("dark-mode");
       toggleSwitch.checked = true;
       localStorage.setItem("dark-mode", "enabled"); // Ensure persistence
     }
@@ -98,9 +101,11 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleSwitch.addEventListener("change", () => {
       if (toggleSwitch.checked) {
         body.classList.add("dark-mode");
+        layoutToggle.classList.add("dark-mode");
         localStorage.setItem("dark-mode", "enabled"); // Save preference
       } else {
         body.classList.remove("dark-mode");
+        layoutToggle.classList.remove("dark-mode");
         localStorage.setItem("dark-mode", "disabled"); // Save preference
       }
     });

@@ -3,32 +3,32 @@
 /* reset css */
 * {
   box-sizing: border-box;
-  font-size: 14px;
   margin: 0;
   padding: 0;
 }
 
 /* Define light mode (default) */
 :root {
-  --bg-color: white;
-  --text-color: black;
+  --toggle-bg-color: white;
+  --toggle-text-color: #222;
+  --toggle-border-color: #222;
+  --toggle-box-shadow: 0 0 5px #222;
 }
 
 /* Define dark mode */
 .dark-mode {
-  --bg-color: #222;
-  --text-color: white;
+  --toggle-bg-color: #222;
+  --toggle-text-color: white;
+  --toggle-border-color: white;
+  --toggle-box-shadow: 0 0 5px white;
 }
 
 /* setup */
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
 html, body {
+  background-color: var(--toggle-bg-color);
+  color: var(--toggle-text-color);
   font-family: "Roboto", sans-serif;
+  font-size: .95rem;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -36,16 +36,6 @@ html, body {
   overflow: hidden;
   cursor: crosshair;
 }
-
-/* navigation */
-
-main {
-  pointer-events: none;
-  margin: 0;
-  padding: 0;
-}
-
-
 
 /* Dark Mode Toggle Button */
 .dark-mode-toggle {
@@ -63,7 +53,7 @@ main {
 
 /* Style the switch */
 .checkbox-label {
-  background-color: #111;
+  background-color: #222;
   width: 38px;
   height: 20px;
   border-radius: 50px;
@@ -73,7 +63,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 3px #d6d5d5;
+  box-shadow: var(--toggle-bg-shadow);
 }
 
 .checkbox-label .ball {
@@ -98,7 +88,7 @@ main {
 }
 
 .dark-mode .checkbox-label .ball {
-  background-color: black; /* Dark ball for contrast */
+  background-color: #222; /* Dark ball for contrast */
 }
 
 /* Dark mode styles */
@@ -156,66 +146,65 @@ canvas {
 body.vertical-layout main {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Aligns links to the right */
+  align-items: flex-start; /* Aligns links to the right */
   position: absolute;
-  right: 10%;
-  top: 20%;
+  right: 20%;
+  top: 160px;
 }
 
 body.vertical-layout a {
   position: relative; /* Allow proper stacking */
   display: block;
-  text-align: right;
   padding: .5rem;
   width: fit-content;
   transition: none;
   overflow: hidden;
+  text-align: left;
 }
 
 
 
 /* Preview box */
 .preview-box {
-  width: 710px; /* The fixed preview box size */
-  height: 394px;
+  width: 40.1vw; /* The fixed preview box size */
+  height: 47.5vh;
   position: fixed;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  /* background: white; */
   overflow: hidden;
   display: none;
   z-index: 9999;
+  border: 1px solid black;
 }
 
 .preview-box iframe {
   width: 1920px; /* Keep full HD resolution */
   height: 1080px;
-  border: none;
-  transform: scale(0.37); /* Scale down to fit within 700px width */
+  transform: scale(0.4); 
   transform-origin: top left;
-  position: absolute;
-  top: 0;
-  left: 0;
   overflow: hidden;
+  border: none;
 }
 
 #layoutToggle {
-  background-color: white;
+  background-color: var(--toggle-text-color);
+  color: var(--toggle-bg-color);
+  box-shadow: var(--toggle-bg-shadow);
+  border: 1px solid var(--toggle-border-color);
   position: absolute;
   top: 20px;
   left: 80px;
   z-index: 100;
-  border: none;
   height: 20px;
   width: 62px;
-  border: 1px solid white;
   border-radius: 50px;
   font-size: 12px;
   cursor: pointer;
   font-weight: bold;
   letter-spacing: -.1px;
-  box-shadow: 0 0 3px #d6d5d5;
+ 
 }
 
 .github-arrow {
