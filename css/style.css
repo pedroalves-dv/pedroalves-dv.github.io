@@ -24,7 +24,7 @@
 }
 
 /* setup */
-html, body {
+body {
   background-color: var(--toggle-bg-color);
   color: var(--toggle-text-color);
   font-family: "Roboto", sans-serif;
@@ -63,7 +63,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: var(--toggle-bg-shadow);
+  /* box-shadow: var(--toggle-bg-shadow); */
 }
 
 .checkbox-label .ball {
@@ -103,7 +103,7 @@ html, body {
 
 .dark-mode a::before {
   background-color: rgba(255, 255, 255, 0.3); /* Adjust blur effect */
-  box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.3);
+  /* box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.3); */
 }
 
 
@@ -175,16 +175,6 @@ body.vertical-layout a {
   border: 1px solid black;
 }
 
-.preview-box .loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 24px;
-  color: #000;
-  display: none;
-}
-
 .preview-box iframe {
   width: 1920px; /* Keep full HD resolution */
   height: 1080px;
@@ -197,14 +187,14 @@ body.vertical-layout a {
 #layoutToggle {
   background-color: var(--toggle-text-color);
   color: var(--toggle-bg-color);
-  box-shadow: var(--toggle-bg-shadow);
+  /* box-shadow: var(--toggle-bg-shadow); */
   border: 1px solid var(--toggle-border-color);
   position: absolute;
   top: 20px;
   left: 80px;
   z-index: 100;
   height: 20px;
-  width: 62px;
+  width: 58px;
   border-radius: 50px;
   font-size: 12px;
   cursor: pointer;
