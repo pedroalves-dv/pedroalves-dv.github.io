@@ -374,19 +374,23 @@ document.addEventListener("DOMContentLoaded", () => {
   allLinks.forEach((link) => {
     link.addEventListener("mouseover", () => {
       if (!isVerticalLayout) return; // Only show preview in vertical mode
-
+  
       const previewUrl = link.getAttribute("href");
-
+  
       if (previewUrl.includes("github.com")) {
         previewBox.style.display = "none"; // ❌ Hide preview for GitHub in vertical mode
         document.querySelector(".github-arrow").style.display = "inline-block";
       } else {
-        // 🌍 Show iframe preview for normal websites
-        previewBox.innerHTML = `<iframe src="${previewUrl}" loading="lazy"></iframe>`;
+        // Use the link's text (trimmed, lowercased, spaces replaced with underscores) for the screenshot name
+        const linkName = link.textContent.trim().toLowerCase().replace(/\s+/g, '_');
+        const screenshotUrl = `assets/images/${linkName}.jpg`; // Adjust path as needed
+  
+        // 🌍 Show screenshot preview for normal websites
+        previewBox.innerHTML = `<img src="${screenshotUrl}" alt="${link.textContent}">`;
         previewBox.style.display = "block";
       }
     });
-
+  
     link.addEventListener("mouseout", () => {
       previewBox.style.display = "none"; // Hide preview when not hovering
       document.querySelector(".github-arrow").style.display = "none";
