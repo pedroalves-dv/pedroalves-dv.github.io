@@ -1,29 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* reset css */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Define light mode (default) */
 :root {
   --toggle-bg-color: white;
-  --toggle-text-color: #161616;;
-  /* --toggle-border-color: #1d1d1d; */
-  /* --toggle-box-shadow: 0 0 5px #1d1d1d; */
+  --toggle-text-color: #161616;
+  --toggle-border-color: black;
+
 }
 
-/* Define dark mode */
 .dark-mode {
-  --toggle-bg-color: #161616;;
   --toggle-text-color: white;
-  /* --toggle-border-color: white; */
-  /* --toggle-box-shadow: 0 0 5px white; */
+  --toggle-bg-color: #161616;
+  --toggle-border-color: rgb(49, 49, 49);
 }
 
-/* setup */
 body {
   background-color: var(--toggle-bg-color);
   color: var(--toggle-text-color);
@@ -42,7 +37,7 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
-  z-index: 100;
+  z-index: 9999;
 }
 
 /* Hide the actual checkbox */
@@ -53,21 +48,21 @@ body {
 
 /* Style the switch */
 .checkbox-label {
-  background-color: #161616;;
+  background-color: var(--toggle-bg-color);
   width: 38px;
-  height: 20px;
+  height: 22px;
   border-radius: 50px;
+  border: 1px solid var(--toggle-text-color);
   position: relative;
   padding: 4px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* box-shadow: var(--toggle-bg-shadow); */
 }
 
 .checkbox-label .ball {
-  background-color: #fff;
+  background-color: var(--toggle-text-color);
   width: 16px;
   height: 16px;
   position: absolute;
@@ -79,29 +74,27 @@ body {
 
 /* Move the ball to the right when checked */
 .checkbox:checked + .checkbox-label .ball {
-  transform: translateX(18px);
+  transform: translateX(17px);
 }
 
 /* Dark mode toggle button */
 .dark-mode .checkbox-label {
-  background-color: white; /* Light background for dark mode */
+  background-color: var(--toggle-text-color);
 }
 
 .dark-mode .checkbox-label .ball {
-  background-color: #161616; /* Dark ball for contrast */
+  background-color: var(--toggle-bg-color);
 }
 
 /* Dark mode styles */
 .dark-mode {
-  background-color: #161616;; /* Dark background */
-  color: white; /* White text */
+  background-color: var(--toggle-bg-color); 
+  color: var(--toggle-text-color);
 }
 
 .dark-mode a {
-  color: white; /* Make links white */
+  color: var(--toggle-text-color);
 }
-
-
 
 a {
   background-color: transparent;
@@ -111,7 +104,7 @@ a {
   text-align: center;
   text-decoration: none;
   transition: transform 1s ease, letter-spacing 0.3s ease, font-style 0.3s ease;
-  z-index: 10;
+  z-index: 9999;
   padding: 1rem;
   position: absolute;
   top: 0;
@@ -121,12 +114,14 @@ a {
 
 a:hover {
   text-decoration: underline;
+  color: rgb(90, 68, 255);
 }
 
 /* canvas */
 .canvas-container {
   width: 100%;
   height: 100%;
+  /* z-index: 2; */
 }
 
 canvas {
@@ -134,40 +129,74 @@ canvas {
   height: 100%;
   background-color: transparent;
   background: none;
+  /* z-index: 2; */
 }
 
 /* Vertical layout mode */
-body.vertical-layout main {
+/* body.vertical-layout main {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Aligns links to the right */
+  align-items: flex-start;
   position: absolute;
-  right: 20%;
-  top: 160px;
+  right: 30%;
+  top: 100px;
+} */
+
+body.vertical-layout main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  position: absolute;
+  top: -3px;
+  right: 10%;
+  width: 60%;
+  gap: 40px;
+  
+  
 }
 
-body.vertical-layout a {
-  position: relative; /* Allow proper stacking */
+/* body.vertical-layout section {
+  position: relative;
+  bottom: 915px;
+  border-bottom: 1px solid var(--toggle-text-color);
+  background-color: transparent;
+  height: 62px;
+  width: 100%;
+  z-index: -1;
+} */
+
+/* body.vertical-layout a {
+  position: relative;
   display: block;
-  padding: .5rem;
+  padding: .3rem;
   width: fit-content;
   transition: none;
   overflow: hidden;
   text-align: left;
-}
+  z-index: 9999;
+} */
 
+body.vertical-layout a {
+  /* position: relative; */
+  /* padding: .3rem 1rem; */
+  transition: none;
+  overflow: hidden;
+  z-index: 9999;
+}
 
 /* Preview box */
 .preview-box {
-  width: 46vw; /* The fixed preview box size */
-  height: 46vh;
+  width: 60vw;
+  height: 60vh;
   position: fixed;
-  top: 38vh;
-  left: 44vw;
+  top: 43vh;
+  left: 50vw;
   transform: translate(-50%, -50%);
   overflow: hidden;
-  z-index: 9999;
-  border: 1px solid black;
+  border: 1px solid var(--toggle-border-color);
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
+  border-radius: 5px;
   display: none;
 }
 
@@ -176,25 +205,28 @@ body.vertical-layout a {
   height: 100%;
 }
 
-#layoutToggle {
+.layout-toggle {
   background-color: transparent;
   color: var(--toggle-text-color);
-  /* box-shadow: var(--toggle-bg-shadow); */
-  /* border: 1px solid var(--toggle-border-color); */
   position: absolute;
-  top: 18px;
+  top: 19px;
   left: 75px;
-  z-index: 100;
   height: 20px;
   width: 58px;
-  /* border-radius: 50px; */
   font-size: 20px;
   cursor: pointer;
   font-weight: bold;
-  letter-spacing: -.1px;
   border: none;
+  z-index: 10000;
+}
+
+.layout-toggle:hover {
+  color: rgb(90, 68, 255);
 }
 
 .github-arrow {
   display: none;
+  position: absolute;
+  top: 15px;
+  right: 2px;
 }
