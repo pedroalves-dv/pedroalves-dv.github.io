@@ -49,8 +49,8 @@ body {
 /* Style the switch */
 .checkbox-label {
   background-color: var(--toggle-bg-color);
-  width: 38px;
-  height: 22px;
+  width: 36px;
+  height: 20px;
   border-radius: 50px;
   border: 1px solid var(--toggle-text-color);
   position: relative;
@@ -63,10 +63,10 @@ body {
 
 .checkbox-label .ball {
   background-color: var(--toggle-text-color);
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   position: absolute;
-  left: 2px;
+  left: 3px;
   top: 2px;
   border-radius: 50%;
   transition: transform 0.2s linear;
@@ -74,7 +74,7 @@ body {
 
 /* Move the ball to the right when checked */
 .checkbox:checked + .checkbox-label .ball {
-  transform: translateX(17px);
+  transform: translateX(15px);
 }
 
 /* Dark mode toggle button */
@@ -146,14 +146,13 @@ body.vertical-layout main {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   position: absolute;
   top: -3px;
   right: 10%;
   width: 60%;
-  gap: 40px;
-  
-  
+  gap: 30px;
+  height: 70px;
 }
 
 /* body.vertical-layout section {
@@ -209,8 +208,8 @@ body.vertical-layout a {
   background-color: transparent;
   color: var(--toggle-text-color);
   position: absolute;
-  top: 19px;
-  left: 75px;
+  top: 18px;
+  left: 65px;
   height: 20px;
   width: 58px;
   font-size: 20px;
