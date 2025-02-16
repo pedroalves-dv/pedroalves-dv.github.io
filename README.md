@@ -6,10 +6,7 @@ This site showcases various projects I have worked on, along with a few interact
 
 → [Portfolio](https://pedroalves-dv.github.io/)
 
-<video width="auto" loop>
-  <source src="assets/portfolio-preview.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![Portfolio Preview](assets/portfolio-preview.gif)
 
 ## Features
 
