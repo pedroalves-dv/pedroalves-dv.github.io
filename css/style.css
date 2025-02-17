@@ -10,6 +10,7 @@
   --toggle-bg-color: white;
   --toggle-text-color: #161616;
   --toggle-border-color: black;
+  --transition-duration: 0.3s;
 
 }
 
@@ -30,6 +31,7 @@ body {
   height: 100%;
   overflow: hidden;
   cursor: crosshair;
+  transition: background-color var(--transition-duration), color var(--transition-duration);
 }
 
 /* Dark Mode Toggle Button */
@@ -130,17 +132,39 @@ canvas {
   /* z-index: 2; */
 }
 
-/* Vertical layout mode */
-/* body.vertical-layout main {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: absolute;
-  right: 30%;
-  top: 100px;
+main {
+  transform-origin: top;
+ 
+}
+
+body.scattered-layout main {
+   animation: scatteredLayout .1s ease-in-out;
+}
+
+/* body.scattered-layout a {
+  animation: scatteredLayout .5s ease-in-out;
 } */
 
-body.vertical-layout main {
+@keyframes scatteredLayout {
+  0% {
+    transform: translate(-100%);
+    opacity: 0;
+    
+  
+  }
+  70% {
+    transform: translate(-100%);
+    opacity: 0;
+   
+  }
+  100% {
+    transform: translate(0);
+    opacity: 1;
+   
+  }
+}
+
+body.straight-layout main {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -151,36 +175,27 @@ body.vertical-layout main {
   width: 60%;
   gap: 30px;
   height: 70px;
+  /* animation: slideDown var(--transition-duration) ease; */
 }
 
-/* body.vertical-layout section {
-  position: relative;
-  bottom: 915px;
-  border-bottom: 1px solid var(--toggle-text-color);
-  background-color: transparent;
-  height: 62px;
-  width: 100%;
-  z-index: -1;
-} */
-
-/* body.vertical-layout a {
-  position: relative;
-  display: block;
-  padding: .3rem;
-  width: fit-content;
-  transition: none;
-  overflow: hidden;
-  text-align: left;
-  z-index: 9999;
-} */
-
-body.vertical-layout a {
-  /* position: relative; */
-  /* padding: .3rem 1rem; */
-  transition: none;
+body.straight-layout a {
+  animation: straightLayout var(--transition-duration) ease-in-out;
   overflow: hidden;
   z-index: 9999;
 }
+
+@keyframes straightLayout {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
 
 /* Preview box */
 .preview-box {
@@ -192,14 +207,26 @@ body.vertical-layout a {
   transform: translate(-50%, -50%);
   overflow: hidden;
   border: 1px solid var(--toggle-border-color);
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
   border-radius: 5px;
   display: none;
 }
 
+
+
 .preview-box img {
   width: 100%;
   height: 100%;
+  animation: preview var(--transition-duration) ease-in-out;
+}
+@keyframes preview {
+  from {
+    /* filter: blur(50px); */
+    opacity: 0;
+  }
+  to {
+    /* filter: blur(0); */
+    opacity: 1;
+  }
 }
 
 .layout-toggle {
@@ -219,7 +246,11 @@ body.vertical-layout a {
 
 .layout-toggle:hover {
   /* color: rgb(90, 68, 255); */
-  color: rgb(99, 99, 99);
+  filter: invert(60%);
+}
+
+.layout-toggle img {
+  transition: filter 0.3s ease;
 }
 
 .github-arrow {

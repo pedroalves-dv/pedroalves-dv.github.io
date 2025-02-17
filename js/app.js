@@ -87,11 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("dark-mode") === "disabled") {
       body.classList.remove("dark-mode");
       layoutToggle.classList.remove("dark-mode");
+      layoutToggle.style.filter = "invert(1)";
       toggleSwitch.checked = false;
     } else {
       // Default to dark mode
       body.classList.add("dark-mode");
       layoutToggle.classList.add("dark-mode");
+      layoutToggle.style.filter = "invert(0)";
       toggleSwitch.checked = true;
       localStorage.setItem("dark-mode", "enabled"); // Ensure persistence
     }
@@ -101,10 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (toggleSwitch.checked) {
         body.classList.add("dark-mode");
         layoutToggle.classList.add("dark-mode");
+        layoutToggle.style.filter = "invert(0)";
         localStorage.setItem("dark-mode", "enabled"); // Save preference
       } else {
         body.classList.remove("dark-mode");
         layoutToggle.classList.remove("dark-mode");
+        layoutToggle.style.filter = "invert(1)";
         localStorage.setItem("dark-mode", "disabled"); // Save preference
       }
     });
@@ -275,14 +279,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const allLinks = document.querySelectorAll("a");
   const body = document.body;
 
-  let isVerticalLayout = false; // Track layout state
+  let isStraightLayout = false; // Track layout state
   let assignedPositions = new Map(); // Store positions for grid mode
 
-  
+
   function generateGridPositions() {
     const gridCellWidth = 150;
     const gridCellHeight = 50;
-    const paddingX = window.innerWidth * 0.2;
+    const paddingX = window.innerWidth * 0.3;
     const paddingY = window.innerHeight * 0.2;
     const usableWidth = window.innerWidth - 2 * paddingX;
     const usableHeight = window.innerHeight - 2 * paddingY;
@@ -313,7 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function shufflePositions(excludeLink) {
-    if (isVerticalLayout) return; // Prevent movement in vertical mode
+    if (isStraightLayout) return; // Prevent movement in straight mode
 
     let availablePositions = [...assignedPositions.values()];
     let hoveredPosition = assignedPositions.get(excludeLink);
@@ -335,12 +339,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Toggle layout button
   layoutToggle.addEventListener("click", () => {
-    isVerticalLayout = !isVerticalLayout;
+    isStraightLayout = !isStraightLayout;
     
-    if (isVerticalLayout) {
-      body.classList.add("vertical-layout");
+    if (isStraightLayout) {
+      body.classList.add("straight-layout");
+      body.classList.remove("scattered-layout");
+      const layoutToggle = document.getElementById("layoutToggle");
+      layoutToggle.innerHTML = "";
+      layoutToggle.innerHTML = `<img src="assets/images/straight-layout.png" style="width: 25px;" alt="Straight Layout">`;
 
-      // 📌 Reset links for vertical layout (stacked on the right)
+      // Reset links for straight layout 
       allLinks.forEach((link, index) => {
         link.style.transform = "none";
         link.style.position = "relative";
@@ -349,9 +357,12 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
     } else {
-      body.classList.remove("vertical-layout");
+      body.classList.remove("straight-layout");
+      body.classList.add("scattered-layout");
+      layoutToggle.innerHTML = "";
+      layoutToggle.innerHTML = `<img src="assets/images/scattered-layout.png" style="width: 25px;" alt="Scattered Layout">`;
 
-      // 📌 Restore grid layout
+      // Restore grid layout
       allLinks.forEach((link) => {
         link.style.position = "absolute";
       });
@@ -369,22 +380,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Hover preview (only in vertical mode)
+  // Hover preview (only in straight mode)
   allLinks.forEach((link) => {
     link.addEventListener("mouseover", () => {
-      if (!isVerticalLayout) return; // Only show preview in vertical mode
+      if (!isStraightLayout) return; // Only show preview in straight mode
   
       const previewUrl = link.getAttribute("href");
   
       if (previewUrl.includes("github.com")) {
-        previewBox.style.display = "none"; // ❌ Hide preview for GitHub in vertical mode
+        previewBox.style.display = "none";
         document.querySelector(".github-arrow").style.display = "inline-block";
       } else {
         // Use the link's text (trimmed, lowercased, spaces replaced with underscores) for the screenshot name
         const linkName = link.textContent.trim().toLowerCase().replace(/\s+/g, '_');
-        const screenshotUrl = `assets/images/${linkName}.jpg`; // Adjust path as needed
+        const screenshotUrl = `assets/images/${linkName}.jpg`; 
   
-        // 🌍 Show screenshot preview for normal websites
         previewBox.innerHTML = `<img src="${screenshotUrl}" alt="${link.textContent}">`;
         previewBox.style.display = "block";
       }
