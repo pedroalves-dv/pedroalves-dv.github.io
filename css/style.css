@@ -23,7 +23,7 @@ body {
   background-color: var(--toggle-bg-color);
   color: var(--toggle-text-color);
   font-family: "Roboto", sans-serif;
-  font-size: .95rem;
+  font-size: .9rem;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -40,13 +40,12 @@ body {
   z-index: 9999;
 }
 
-/* Hide the actual checkbox */
 .checkbox {
   opacity: 0;
   position: absolute;
 }
 
-/* Style the switch */
+/* button body style */
 .checkbox-label {
   background-color: var(--toggle-bg-color);
   width: 36px;
@@ -72,12 +71,11 @@ body {
   transition: transform 0.2s linear;
 }
 
-/* Move the ball to the right when checked */
+/* ball translateX */
 .checkbox:checked + .checkbox-label .ball {
   transform: translateX(15px);
 }
 
-/* Dark mode toggle button */
 .dark-mode .checkbox-label {
   background-color: var(--toggle-text-color);
 }
@@ -96,6 +94,7 @@ body {
   color: var(--toggle-text-color);
 }
 
+/* Links  */
 a {
   background-color: transparent;
   color: var(--text-color);
@@ -104,7 +103,7 @@ a {
   text-align: center;
   text-decoration: none;
   transition: transform 1s ease, letter-spacing 0.3s ease, font-style 0.3s ease;
-  z-index: 9999;
+  z-index: 1;
   padding: 1rem;
   position: absolute;
   top: 0;
@@ -113,15 +112,14 @@ a {
 
 
 a:hover {
-  text-decoration: underline;
-  color: rgb(90, 68, 255);
+  color: rgb(99, 99, 99);
+  z-index: 9999;
 }
 
 /* canvas */
 .canvas-container {
   width: 100%;
   height: 100%;
-  /* z-index: 2; */
 }
 
 canvas {
@@ -220,7 +218,8 @@ body.vertical-layout a {
 }
 
 .layout-toggle:hover {
-  color: rgb(90, 68, 255);
+  /* color: rgb(90, 68, 255); */
+  color: rgb(99, 99, 99);
 }
 
 .github-arrow {

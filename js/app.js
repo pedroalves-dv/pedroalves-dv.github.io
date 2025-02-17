@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isDrawing = false;
 
-  // Define the colors and the current color index
   const colors = [
     "red",
     "#fc3b00",
@@ -53,18 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const y = event.clientY - canvas.offsetTop;
 
     // Draw on the canvas
-    ctx.lineWidth = 60;
+    ctx.lineWidth = 50;
     ctx.lineCap = "round";
-    ctx.strokeStyle = colors[colorIndex]; // Change this value to adjust the stroke color
-    ctx.shadowBlur = 30; // Change this value to adjust the amount of blur
-    ctx.shadowColor = colors[colorIndex]; // Change this value to adjust the shadow color
+    ctx.strokeStyle = colors[colorIndex]; 
+    ctx.shadowBlur = 30; 
+    ctx.shadowColor = colors[colorIndex]; 
     ctx.lineTo(x, y);
     ctx.stroke();
 
-    ctx.lineWidth = 60;
+    ctx.lineWidth = 50;
     ctx.lineCap = "round";
-    ctx.strokeStyle = colors[colorIndex]; // Solid stroke color for the line
-    ctx.shadowBlur = 30; // No shadow for the line
+    ctx.strokeStyle = colors[colorIndex];
+    ctx.shadowBlur = 50; 
     ctx.shadowColor = colors[colorIndex];
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -279,12 +278,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let isVerticalLayout = false; // Track layout state
   let assignedPositions = new Map(); // Store positions for grid mode
 
-  // 📌 Store random grid positions at the start
+  
   function generateGridPositions() {
     const gridCellWidth = 150;
     const gridCellHeight = 50;
-    const paddingX = window.innerWidth * 0.3;
-    const paddingY = window.innerHeight * 0.3;
+    const paddingX = window.innerWidth * 0.2;
+    const paddingY = window.innerHeight * 0.2;
     const usableWidth = window.innerWidth - 2 * paddingX;
     const usableHeight = window.innerHeight - 2 * paddingY;
     const columns = Math.floor(usableWidth / gridCellWidth);
