@@ -11,63 +11,123 @@
   </head>
 
   <body>
+    <!-- Nav -->
+    <div class="header">
+      <button id="darkModeToggle" class="dark-mode-toggle">
+        <img src="assets/images/light-mode.png" alt="Dark Mode Button" />
+      </button>
+      <button id="layoutToggle" class="layout-toggle">
+        <img src="assets/images/scattered.png" alt="Layout Toggle Button" />
+      </button>
+      <a
+        class="header-link"
+        href="https://github.com/pedroalves-dv"
+        alt="A link to my Github."
+        target="_blank"
+        >Github</a
+      >
+    </div>
+    <!-- Canvas -->
     <div class="canvas-container">
       <canvas id="canvas"></canvas>
-      <section class="header">
-        <div id="darkmode" class="dark-mode-toggle">
-          <input type="checkbox" class="checkbox" id="checkbox" />
-          <label for="checkbox" class="checkbox-label">
-            <span class="ball"></span>
-          </label>
-        </div>
-        <!-- Layout toggle button -->
-        <button id="layoutToggle" class="layout-toggle"><img src="assets/images/scattered-layout.png" alt="Layout Toggle Button" style="width: 25px;" /></button>
-      </section>
-      <!-- Peek preview container -->
-      <div id="previewBox" class="preview-box"></div>
     </div>
-
-    <main id="main" class="hidden">
+    <!-- Scattered Layout -->
+    <main class="scattered-layout">
       <a
-        class="link1"
-        rel="preload"
+        data-screenshot="assets/images/pixel_painter.jpg"
         href="https://pedroalves-dv.github.io/pixelpainter/"
+        data-description="Pixel painter is an interactive pixel art drawing application.
+        Supports click and drag, grid customization, preset functions.
+        Future improvements include enhanced export options and customizable
+        workspace.(WIP)"
         target="_blank"
         >Pixel Painter</a
       >
       <a
-        class="link2"
         rel="preload"
-        href="https://pedroalves-dv.github.io/cash-register/"
-        target="_blank"
-        >Cash Register App</a
-      >
-      <a
-        class="link3"
-        rel="preload"
-        href="https://pedroalves-dv.github.io/dragon-repeller/"
-        target="_blank"
-        >RPG mini game</a
-      >
-      <a
-        class="link4"
-        rel="preload"
+        data-screenshot="assets/images/currency_converter.jpg"
         href="https://pedroalves-dv.github.io/global-currency-tool/"
+        data-description="Fully responsive currency conversion tool with a unique
+        spending power feature. Designed for travelers and expats who want quick,
+        real-time exchange rates and cost-of-living comparisons."
         target="_blank"
-        >Currency Converter</a
+        >Global Exchange Tool</a
       >
       <a
-        class="link5"
+        
         rel="preload"
+        data-screenshot="assets/images/cash_register.jpg"
+        href="https://pedroalves-dv.github.io/cash-register/"
+        data-description="This app is a interactive change calculator to manage cash transactions.
+        (Record of units in the register's detail is not meant for practical use.)"
+        target="_blank"
+        >Cash Register</a
+      >
+      <a
+        
+        rel="preload"
+        data-screenshot="assets/images/rpg_mini_game.jpg"
+        href="https://pedroalves-dv.github.io/dragon-repeller/"
+        data-description="Dragon Slayer 9000 is a browser-based role-playing game (RPG)
+        developed using HTML, CSS, and JavaScript. Players navigate through various locations,
+        engage in battles with monsters, and aim to defeat a dragon."
+        target="_blank"
+        >Dragon Slayer 9000</a
+      >
+      
+      <!-- <a
+        
+        rel="preload"
+        data-screenshot="assets/images/tumblr.jpg"
         href="https://pedroalvesmadeira.tumblr.com/"
+        data-description="A link to my Tumblr blog."
+        target="_blank"
+        >Tumblr</a
+      > -->
+    </main>
+    <!-- Straight Layout -->
+    <div class="straight-layout-container hidden">
+      <!-- Projects -->
+      <div class="projects"></div>
+      <!-- Info -->
+      <aside class="info">
+        <div class="title">
+          <h3>SELECTED PROJECTS</h3>
+          <p>2025</p>
+        </div>
+        <div class="text">
+          <p>
+            Versatile professional with a diverse background in both creative
+            and technical roles, I thrive on driving seamless customer
+            experience.
+            
+          </p>
+        </div>
+      </aside>
+    </div>
+    <div class="linkedin">
+      <a
+        class="header-link"
+        href="https://www.linkedin.com/in/pedroalves-dv/"
+        alt="A link to my Linkedin profile."
+        target="_blank"
+        >
+        <div>
+          <span class="indent fade">PEDRO ALVES</span>
+          <span class="fade">Graphic Design & Web Development</span>
+          <span class="indent">Linkedin</span>
+        </div>
+      </a>
+    </div>
+    <div class="tumblr">
+      <a
+        class="header-link"
+        href="https://pedroalvesmadeira.tumblr.com/"
+        alt="A link to my Tumblr blog."
         target="_blank"
         >Tumblr</a
       >
-      <a href="https://github.com/pedroalves-dv" target="_blank"
-        >GitHub <span class="github-arrow"> <</span></a
-      >
-    </main>
-
+    </div>
     <script src="/js/app.js"></script>
   </body>
 </html>
