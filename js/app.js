@@ -143,6 +143,7 @@
       layoutToggle.innerHTML = `<img src="assets/images/straight.png" alt="Straight Layout">`;
 
       projects.innerHTML = "";
+      
 
       allLinks.forEach((link) => {
         const card = document.createElement("div");

@@ -64,6 +64,15 @@ body {
   cursor: crosshair;
   transition: background-color var(--transition-duration),
     color var(--transition-duration) ease-in-out;
+  transition: background-color var(--transition-duration) cubic-bezier(0.55, 0, 0.1, 1),
+    color var(--transition-duration) cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.header-link,
+.dark-mode-toggle img,
+.layout-toggle img,
+main a {
+  transition: filter var(--transition-duration) cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .header {
@@ -216,9 +225,14 @@ canvas {
   height: auto;
   gap: 10px;
   position: relative;
-  background-color: var(--toggle-bg-color);
+  background: none;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+  opacity: 1;
+  z-index: 2;
   /* border: 1px solid blue; */
 }
+
+
 
 .projects {
   padding: 20px 0;
@@ -228,7 +242,9 @@ canvas {
   align-items: start;
   width: 550px;
   overflow: auto;
-  z-index: 99;
+  z-index: 999;
+  transition: opacity 0.4s ease-in-out;
+  opacity: 1;
   /* border: 1px solid red; */
 }
 
@@ -246,7 +262,7 @@ canvas {
   padding: 20px;
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 999;
   height: auto;
   width: 360px;
   /* border: 1px solid limegreen; */
@@ -275,11 +291,9 @@ h3 {
   margin-bottom: 20px;
 }
 
-.global-exchange-tool-card img {
-  object-fit: cover;
-  /* transform: scale(1.3); */
-}
+
 
 .hidden {
-  display: none;
+  pointer-events: none;
+  opacity: 0;
 }
