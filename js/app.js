@@ -138,12 +138,17 @@
     isStraightLayout = !isStraightLayout;
 
     if (isStraightLayout) {
+      // projects.classList.remove("hidden");
+      // info.classList.remove("hidden");
       straightLayoutContainer.classList.remove("hidden");
+      straightLayoutContainer.classList.add("fade-in");
       main.classList.add("hidden");
       layoutToggle.innerHTML = `<img src="assets/images/straight.png" alt="Straight Layout">`;
 
       projects.innerHTML = "";
       
+      // projects.classList.remove("fade-in");
+      // info.classList.remove("fade-in");
 
       allLinks.forEach((link) => {
         const card = document.createElement("div");
@@ -161,14 +166,29 @@
           
         projects.appendChild(card);
         link.style.display = "none";
+        requestAnimationFrame(() => {
+          card.classList.add("fade-in");
+        });
+      });
+
+      requestAnimationFrame(() => {
+        projects.classList.add("fade-in");
+        info.classList.add("fade-in");
       });
 
       straightLayoutContainer.appendChild(projects);
       straightLayoutContainer.appendChild(info);
      
     } else {
+      
+      projects.classList.remove("fade-in");
+    info.classList.remove("fade-in");
+
+      // projects.classList.add("hidden");
+      // info.classList.add("hidden");
       straightLayoutContainer.classList.add("hidden");
       main.classList.remove("hidden");
+      main.classList.add("fade-in");
       layoutToggle.innerHTML = `<img src="assets/images/scattered.png" alt="Scattered Layout">`;
 
       allLinks.forEach((link) => {

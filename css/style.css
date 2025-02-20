@@ -58,21 +58,13 @@ body {
   font-family: "Inter", serif;
   font-family: sans-serif;
   font-family: "Arimo", serif;
-  /* letter-spacing: -1px; */
-  width: 100%;
+  height: auto;
   min-height: 100vh;
   cursor: crosshair;
   transition: background-color var(--transition-duration),
     color var(--transition-duration) ease-in-out;
-  transition: background-color var(--transition-duration) cubic-bezier(0.55, 0, 0.1, 1),
-    color var(--transition-duration) cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.header-link,
-.dark-mode-toggle img,
-.layout-toggle img,
-main a {
-  transition: filter var(--transition-duration) cubic-bezier(0.55, 0, 0.1, 1);
+  transition: background-color var(--transition-duration),
+    color var(--transition-duration);
 }
 
 .header {
@@ -180,6 +172,9 @@ main a:hover {
   align-items: center;
 }
 
+main {
+  transition: opacity 0.5s ease-in-out;
+}
 /* Main Links  */
 main a {
   color: var(--text-color);
@@ -203,7 +198,6 @@ main a {
   display: flex;
   width: 100vw;
   height: 100vh;
-  background: none;
   z-index: 1;
 }
 
@@ -213,6 +207,7 @@ canvas {
   height: 100vh;
   background-color: transparent;
   background: none;
+  /* z-index: 1; */
 }
 
 /* Straight Layout */
@@ -221,20 +216,21 @@ canvas {
   flex-direction: row;
   justify-content: end;
   align-items: start;
-  width: auto;
-  height: auto;
+  /* width: auto;
+  height: auto; */
   gap: 10px;
-  position: relative;
+  /* position: relative; */
   background: none;
-  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
-  opacity: 1;
-  z-index: 2;
-  /* border: 1px solid blue; */
+  pointer-events: none;
+   /* transition: opacity 0.8s ease-in-out, visibility 0.4s ease-in-out;
+  opacity: 1; */
+  /* z-index: 2; */
+  border: 1px solid blue;
 }
 
 
-
 .projects {
+  pointer-events: auto;
   padding: 20px 0;
   display: flex;
   flex-direction: column;
@@ -243,9 +239,13 @@ canvas {
   width: 550px;
   overflow: auto;
   z-index: 999;
-  transition: opacity 0.4s ease-in-out;
-  opacity: 1;
+  opacity: 0;          /* start hidden */
+  transition: opacity 0.5s ease-in-out; /* fade duration */
   /* border: 1px solid red; */
+}
+
+.projects.fade-in, .info.fade-in {
+  opacity: 1; /* they fade from 0 to 1 */
 }
 
 .projects a {
@@ -292,8 +292,8 @@ h3 {
 }
 
 
-
 .hidden {
   pointer-events: none;
   opacity: 0;
+  transition: opacity 0.4s ease-in-out;
 }
