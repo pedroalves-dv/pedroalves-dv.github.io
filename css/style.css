@@ -14,7 +14,7 @@ body::-webkit-scrollbar {
 
 :root {
   --toggle-text-color: #161616;
-  --toggle-bg-color: #ddd;
+  --toggle-bg-color: #f0f0f0;
   --toggle-border-color: black;
   --transition-duration: 0.4s;
 }
@@ -25,14 +25,14 @@ body::-webkit-scrollbar {
 }
 
 .dark-mode {
-  --toggle-text-color: #ddd;
+  --toggle-text-color: #f0f0f0;
   --toggle-bg-color: #161616;
   --transition-duration: 0.4s;
 }
 
 .light-mode {
   --toggle-text-color: #161616;
-  --toggle-text-color: #ddd;
+  --toggle-text-color: #f0f0f0;
   --transition-duration: 0.4s;
 }
 
