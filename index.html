@@ -19,19 +19,27 @@
       <button id="layoutToggle" class="layout-toggle">
         <img src="assets/images/scattered.png" alt="Layout Toggle Button" />
       </button>
+      <div class="separator"></div>
       <a
-        class="header-link"
+        class="header-link top-link"
         href="https://github.com/pedroalves-dv"
         alt="A link to my Github."
         target="_blank"
         >Github
         </a>
         <a
-        class="header-link"
+        class="header-link top-link"
         href="https://bright-camp-bc1.notion.site/UX-Case-Studies-Hub-1fb8f3a8d695801db885dd8732f1de1d?pvs=4"
         alt="A link to my Github."
         target="_blank"
         >UX
+        </a>
+        <a
+        class="header-link top-link"
+        href="https://pedroalvesmadeira.tumblr.com/"
+        alt="A link to my Github."
+        target="_blank"
+        >Tumblr
         </a>
     </div>
     <!-- Canvas -->
@@ -41,6 +49,8 @@
     <!-- Scattered Layout -->
     <main class="scattered-layout">
       <a
+        class="scattered-link"
+        data-preview-id="preview-modal-link1"
         data-screenshot="assets/images/pixel_painter.jpg"
         href="https://pedroalves-dv.github.io/pixelpainter/"
         data-description="Pixel painter is an interactive pixel art drawing application.
@@ -51,6 +61,8 @@
         >Pixel Painter</a
       >
       <a
+        class="scattered-link"
+        data-preview-id="preview-modal-link2"
         rel="preload"
         data-screenshot="assets/images/currency_converter.jpg"
         href="https://pedroalves-dv.github.io/global-exchange-tool/"
@@ -61,7 +73,8 @@
         >Global Exchange Tool</a
       >
       <a
-        
+        class="scattered-link"
+        data-preview-id="preview-modal-link3"
         rel="preload"
         data-screenshot="assets/images/cash_register.jpg"
         href="https://pedroalves-dv.github.io/cash-register/"
@@ -71,7 +84,8 @@
         >Cash Register</a
       >
       <a
-        
+        class="scattered-link"
+        data-preview-id="preview-modal-link4"
         rel="preload"
         data-screenshot="assets/images/rpg_mini_game.jpg"
         href="https://pedroalves-dv.github.io/dragon-repeller/"
@@ -82,15 +96,6 @@
         >Dragon Slayer 9000</a
       >
       
-      <!-- <a
-        
-        rel="preload"
-        data-screenshot="assets/images/tumblr.jpg"
-        href="https://pedroalvesmadeira.tumblr.com/"
-        data-description="A link to my Tumblr blog."
-        target="_blank"
-        >Tumblr</a
-      > -->
     </main>
     <!-- Straight Layout -->
     <div class="straight-layout-container hidden">
@@ -99,16 +104,16 @@
       <!-- Info -->
       <aside class="info">
         <div class="title">
-          <h3>SELECTED PROJECTS</h3>
-          <p>2025</p>
+          <!-- <h3>SELECTED PROJECTS</h3> -->
+          <!-- <p>2025</p> -->
         </div>
         <div class="text">
-          <p>
+          <!-- <p>
             Versatile professional with a diverse background in both creative
             and technical roles, I thrive on driving seamless customer
             experience.
             
-          </p>
+          </p> -->
         </div>
       </aside>
     </div>
@@ -126,7 +131,7 @@
         </div>
       </a>
     </div>
-    <div class="tumblr">
+    <!-- <div class="tumblr">
       <a
         class="header-link"
         href="https://pedroalvesmadeira.tumblr.com/"
@@ -134,7 +139,20 @@
         target="_blank"
         >Tumblr</a
       >
-    </div>
+    </div> -->
+
+    <div class="preview-modal hidden" id="preview-modal-link1">
+  <img src="assets/images/pixel_painter.jpg" alt="Preview 1" width="400">
+</div>
+<div class="preview-modal hidden" id="preview-modal-link2">
+  <img src="assets/old/currency_converter.jpg" alt="Preview 2" width="400">
+</div>
+<div class="preview-modal hidden" id="preview-modal-link3">
+  <img src="assets/images/cash_register.jpg" alt="Preview 3" width="400">
+</div>
+<div class="preview-modal hidden" id="preview-modal-link4">
+  <img src="assets/images/rpg_mini_game.jpg" alt="Preview 4" width="400">
+</div>
     <script src="/js/app.js"></script>
   </body>
 </html>

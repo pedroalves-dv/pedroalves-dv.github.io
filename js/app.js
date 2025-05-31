@@ -1,5 +1,5 @@
+//---------------------------------------------------------------------------------------
 // Canvas Drawing Functionality
-// ===============================================================================
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
 
@@ -35,8 +35,8 @@
   canvas.addEventListener("mouseup", () => (isDrawing = false));
   canvas.addEventListener("mouseleave", () => (isDrawing = false));
 
+//---------------------------------------------------------------------------------------
 // Dark Mode Functionality
-// ===============================================================================
   const layoutToggle = document.querySelector(".layout-toggle");
   const darkModeToggle = document.querySelector(".dark-mode-toggle");
   const body = document.body;
@@ -64,8 +64,8 @@
     updateDarkMode();
   });
 
+//---------------------------------------------------------------------------------------
 // Layouts
-// ===============================================================================
   const allLinks = document.querySelectorAll("main a");
   const main = document.querySelector("main");
   const straightLayoutContainer = document.querySelector(".straight-layout-container");
@@ -74,8 +74,8 @@
   let isStraightLayout = false;
   let assignedPositions = new Map();
 
+//---------------------------------------------------------------------------------------
 // Scattered Layout
-
   function generateGridPositions() {
     const gridCellWidth = 150;
     const gridCellHeight = 50;
@@ -131,76 +131,183 @@
       link.style.transform = `translate(${newPos.x}px, ${newPos.y}px)`;
     });
   }
+//---------------------------------------------------------------------------------------
+// Static Preview Modal Functionality (OLD)
+// let currentPreviewModal = null;
 
-  // Strtaight Layout
+// allLinks.forEach((link, idx) => {
+//   link.setAttribute("data-preview-id", `preview-modal-link${idx + 1}`);
+//   link.addEventListener("mouseenter", () => {
+//     if (!isStraightLayout) {
+//       // Hide previous modal
+//       if (currentPreviewModal) {
+//         currentPreviewModal.classList.add("hidden");
+//       }
+//       // Show new modal
+//       const previewId = link.getAttribute("data-preview-id");
+//       if (previewId) {
+//         const modal = document.getElementById(previewId);
+//         if (modal) {
+//           modal.classList.remove("hidden");
+//           // Make modal clickable: open the link in a new tab
+//           modal.onclick = (e) => {
+//             e.stopPropagation();
+//             window.open(link.href, "_blank");
+//           };
+//           currentPreviewModal = modal;
+//         }
+//       }
+//     }
+//   })
+// });
 
-  layoutToggle.addEventListener("click", () => {
-    isStraightLayout = !isStraightLayout;
 
-    if (isStraightLayout) {
-      // projects.classList.remove("hidden");
-      // info.classList.remove("hidden");
-      straightLayoutContainer.classList.remove("hidden");
-      straightLayoutContainer.classList.add("fade-in");
-      main.classList.add("hidden");
-      layoutToggle.innerHTML = `<img src="assets/images/straight.png" alt="Straight Layout">`;
+//---------------------------------------------------------------------------------------
+// Dynamic Preview Modal Functionality
+let currentPreviewModal = null;
 
-      projects.innerHTML = "";
-      
-      // projects.classList.remove("fade-in");
-      // info.classList.remove("fade-in");
+allLinks.forEach((link, idx) => {
+  link.setAttribute("data-preview-id", `preview-modal-link${idx + 1}`);
+  link.addEventListener("mouseenter", () => {
+    if (!isStraightLayout) {
+      // Hide previous modal
+      if (currentPreviewModal) {
+        currentPreviewModal.classList.add("hidden");
+      }
+      // Show new modal
+      const previewId = link.getAttribute("data-preview-id");
+      if (previewId) {
+        const modal = document.getElementById(previewId);
+        if (modal) {
+          // Assign a random top position (e.g., between 30px and window.innerHeight - 400px)
+          const minTop = 25;
+          const maxTop = 440;
+          const randomTop = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
+          modal.style.top = `${randomTop}px`;
+          modal.style.right = "125px"; // keep right fixed
 
-      allLinks.forEach((link) => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        const slug = link.textContent.toLowerCase().replace(/\s+/g, '-');
-        card.classList.add(`${slug}-card`);
-        card.innerHTML = `
-          <a href="${link.href}" target="_blank">
-          <img src="${link.getAttribute("data-screenshot")}" alt="${link.textContent}">
-          <div class="card-content">
-            <h3 class="indent-card">${link.textContent.toUpperCase()}</h3>
-            <p>${link.getAttribute("data-description")}</p>
-          </div>
-          </a>`;
-          
-        projects.appendChild(card);
-        link.style.display = "none";
-        requestAnimationFrame(() => {
-          card.classList.add("fade-in");
-        });
-      });
-
-      requestAnimationFrame(() => {
-        projects.classList.add("fade-in");
-        info.classList.add("fade-in");
-      });
-
-      straightLayoutContainer.appendChild(projects);
-      straightLayoutContainer.appendChild(info);
-     
-    } else {
-      
-      projects.classList.remove("fade-in");
-    info.classList.remove("fade-in");
-
-      // projects.classList.add("hidden");
-      // info.classList.add("hidden");
-      straightLayoutContainer.classList.add("hidden");
-      main.classList.remove("hidden");
-      main.classList.add("fade-in");
-      layoutToggle.innerHTML = `<img src="assets/images/scattered.png" alt="Scattered Layout">`;
-
-      allLinks.forEach((link) => {
-        link.style.display = "block";
-      });
-
-      assignGridPositions();
+          modal.classList.remove("hidden");
+          // Make modal clickable: open the link in a new tab
+          modal.onclick = (e) => {
+            e.stopPropagation();
+            window.open(link.href, "_blank");
+          };
+          currentPreviewModal = modal;
+        }
+      }
     }
   });
+});
+
+//---------------------------------------------------------------------------------------
+// Straight Layout
+function populateStraightLayout() {
+  projects.innerHTML = "";
+
+
+
+  allLinks.forEach((link) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    const slug = link.textContent.toLowerCase().replace(/\s+/g, '-');
+    card.classList.add(`${slug}-card`);
+    card.innerHTML = `
+      <a href="${link.href}" target="_blank">
+        <img src="${link.getAttribute("data-screenshot")}" alt="${link.textContent}">
+        <div class="card-content">
+          <h3 class="indent-card">${link.textContent.toUpperCase()}</h3>
+          <p>${link.getAttribute("data-description")}</p>
+        </div>
+      </a>`;
+    projects.appendChild(card);
+    link.style.display = "none";
+    requestAnimationFrame(() => {
+      card.classList.add("fade-in");
+    });
+  });
+
+  requestAnimationFrame(() => {
+    projects.classList.add("fade-in");
+    info.classList.add("fade-in");
+  });
+
+  straightLayoutContainer.appendChild(projects);
+  straightLayoutContainer.appendChild(info);
+}
+
+layoutToggle.addEventListener("click", () => {
+  isStraightLayout = !isStraightLayout;
+
+  if (currentPreviewModal) {
+    currentPreviewModal.classList.add("hidden");
+    currentPreviewModal = null;
+  }
+
+  if (isStraightLayout) {
+    straightLayoutContainer.classList.remove("hidden");
+    straightLayoutContainer.classList.add("fade-in");
+    main.classList.add("hidden");
+    layoutToggle.innerHTML = `<img src="assets/images/straight.png" alt="Straight Layout">`;
+
+    populateStraightLayout(); // <--- Use the function here
+
+  } else {
+    projects.classList.remove("fade-in");
+    info.classList.remove("fade-in");
+    straightLayoutContainer.classList.add("hidden");
+    main.classList.remove("hidden");
+    main.classList.add("fade-in");
+    layoutToggle.innerHTML = `<img src="assets/images/scattered.png" alt="Scattered Layout">`;
+
+    allLinks.forEach((link) => {
+      link.style.display = "block";
+    });
+
+    assignGridPositions();
+  }
+});
 
   assignGridPositions();
 
   allLinks.forEach((link) => {
     link.addEventListener("mouseover", () => shufflePositions(link));
   });
+
+//---------------------------------------------------------------------------------------
+// Mobile Layout
+
+  function isMobile() {
+  return window.innerWidth <= 1440; // or your preferred breakpoint
+}
+
+function setMobileLayout() {
+   if (currentPreviewModal) {
+    currentPreviewModal.classList.add("hidden");
+    currentPreviewModal = null;
+  }
+  if (isMobile()) {
+    // Always show straight layout, hide toggle
+    straightLayoutContainer.classList.remove("hidden");
+    main.classList.add("hidden");
+    
+    layoutToggle.style.display = "none";
+    isStraightLayout = true;
+    populateStraightLayout(); // <-- Populate the straight layout!
+     info.style.display = "none"; // Hide info in mobile layout
+  } else {
+    // Restore normal toggle behavior
+    layoutToggle.style.display = "";
+     info.style.display = ""; // Show info in desktop layout
+    if (!isStraightLayout) {
+      straightLayoutContainer.classList.add("hidden");
+      main.classList.remove("hidden");
+      // Show links again
+      allLinks.forEach((link) => {
+        link.style.display = "block";
+      });
+    }
+  }
+}
+
+window.addEventListener("resize", setMobileLayout);
+window.addEventListener("DOMContentLoaded", setMobileLayout);

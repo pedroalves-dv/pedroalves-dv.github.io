@@ -14,7 +14,7 @@ body::-webkit-scrollbar {
 
 :root {
   --toggle-text-color: #161616;
-  --toggle-bg-color: #f0f0f0;
+  --toggle-bg-color: #ffffff;
   --toggle-border-color: black;
   --transition-duration: 0.4s;
 }
@@ -30,11 +30,6 @@ body::-webkit-scrollbar {
   --transition-duration: 0.4s;
 }
 
-.light-mode {
-  --toggle-text-color: #161616;
-  --toggle-text-color: #f0f0f0;
-  --transition-duration: 0.4s;
-}
 
 html,
 body {
@@ -49,7 +44,6 @@ body {
 }
 
 body, a, p, div {
-  /* font-family: sans-serif; */
   font-size: .9rem;
   -webkit-font-smoothing: antialiased;
 }
@@ -79,6 +73,7 @@ body {
   padding: 0 15px;
   gap: 15px;
   z-index: 99;
+  
 }
 
 .header-link {
@@ -88,9 +83,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: filter 0.4s ease-in-out;
-  color: var(--text-color);
+  transition: filter 0.3s ease-in-out;
+  color: var(--toggle-text-color);
+  padding-right: 20px; 
 }
+
+
+.layout-toggle {
+  margin-right: 30px;
+}
+
+
 
 .linkedin {
   backface-visibility: hidden;
@@ -106,7 +109,6 @@ body {
   align-items: center;
   color: var(--text-color);
   writing-mode: sideways-lr;
-  
   -webkit-font-smoothing: antialiased;
 }
 
@@ -127,7 +129,7 @@ body {
   padding-left: 80px;
 }
 
-.tumblr {
+/* .tumblr {
   backface-visibility: hidden;
   will-change: transform;
   z-index: 99;
@@ -143,8 +145,8 @@ body {
   transform: scale(-1, -1);
   transform: rotate(180deg) translateZ(0);
   -webkit-font-smoothing: antialiased;
- 
-}
+
+} */
 
 .dark-mode-toggle,
 .layout-toggle {
@@ -164,7 +166,7 @@ main a:hover {
 
 .dark-mode-toggle img,
 .layout-toggle img {
-  transition: filter 0.4s ease-in-out;
+  transition: filter 0.3s ease-in-out;
   width: 22px;
   height: 22px;
   display: flex;
@@ -182,13 +184,14 @@ main a {
   display: inline-block;
   text-align: center;
   text-decoration: none;
-  transition: transform 1s ease, letter-spacing 0.3s ease, font-style 0.3s ease;
+  transition: transform 1s ease, letter-spacing 0.3s ease, font-style 0.3s ease, filter 0.3s ease-in-out;
   z-index: 99;
   padding: 1rem;
   position: absolute;
   top: 0;
   left: 0;
 }
+
 
 /* Canvas */
 .canvas-container {
@@ -216,8 +219,6 @@ canvas {
   flex-direction: row;
   justify-content: end;
   align-items: start;
-  /* width: auto;
-  height: auto; */
   gap: 10px;
   /* position: relative; */
   background: none;
@@ -226,6 +227,7 @@ canvas {
   opacity: 1; */
   /* z-index: 2; */
   /* border: 1px solid blue; */
+  padding-top: 35px;
 }
 
 
@@ -295,5 +297,47 @@ h3 {
 .hidden {
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.preview-modal {
+  position: fixed;
+  top: 25px;
+  right: 125px;
+  max-width: 300px;
+  max-height: 400px;
+  object-fit: contain;
+  z-index: 99;
+  cursor: pointer;
+}
+
+/* Example: For screens <= 600px wide */
+@media (max-width: 1440px) {
+  .scattered-layout {
+    display: none !important;
+  }
+  .straight-layout-container {
+    display: flex !important;
+    /* Add any mobile-specific tweaks here */
+  }
+  .layout-toggle {
+    display: none !important; /* Hide the toggle button */
+  }
+}
+
+@media (max-width: 640px) {
+  .linkedin {
+    display: none;
+  }
+
+  .header {
+    width: 100%;
+    justify-content: space-between;
+    background-color: var(--toggle-bg-color);
+    z-index: 9999;
+  }
+
+  html {
+    font-size: 15px;
+  }
 }
