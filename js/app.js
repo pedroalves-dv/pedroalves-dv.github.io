@@ -131,35 +131,7 @@
       link.style.transform = `translate(${newPos.x}px, ${newPos.y}px)`;
     });
   }
-//---------------------------------------------------------------------------------------
-// Static Preview Modal Functionality (OLD)
-// let currentPreviewModal = null;
 
-// allLinks.forEach((link, idx) => {
-//   link.setAttribute("data-preview-id", `preview-modal-link${idx + 1}`);
-//   link.addEventListener("mouseenter", () => {
-//     if (!isStraightLayout) {
-//       // Hide previous modal
-//       if (currentPreviewModal) {
-//         currentPreviewModal.classList.add("hidden");
-//       }
-//       // Show new modal
-//       const previewId = link.getAttribute("data-preview-id");
-//       if (previewId) {
-//         const modal = document.getElementById(previewId);
-//         if (modal) {
-//           modal.classList.remove("hidden");
-//           // Make modal clickable: open the link in a new tab
-//           modal.onclick = (e) => {
-//             e.stopPropagation();
-//             window.open(link.href, "_blank");
-//           };
-//           currentPreviewModal = modal;
-//         }
-//       }
-//     }
-//   })
-// });
 
 
 //---------------------------------------------------------------------------------------
