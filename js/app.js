@@ -221,8 +221,10 @@ layoutToggle.addEventListener("click", () => {
     main.classList.add("hidden");
     layoutToggle.innerHTML = `<img src="assets/images/straight.png" alt="Straight Layout">`;
 
-    populateStraightLayout(); // <--- Use the function here
+    document.body.style.overflow = "auto";
+    populateStraightLayout();
 
+    // document.body.style.overflow = "hidden";
   } else {
     projects.classList.remove("fade-in");
     info.classList.remove("fade-in");
@@ -236,6 +238,14 @@ layoutToggle.addEventListener("click", () => {
     });
 
     assignGridPositions();
+
+    // Disable scroll for scattered layout
+    document.body.style.overflow = "hidden";
+
+    // --- FIX: Reset scroll position and prevent scroll ---
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    projects.scrollTop = 0;
   }
 });
 
