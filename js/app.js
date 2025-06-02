@@ -77,8 +77,8 @@
 //---------------------------------------------------------------------------------------
 // Scattered Layout
   function generateGridPositions() {
-    const gridCellWidth = 150;
-    const gridCellHeight = 50;
+    const gridCellWidth = 200;
+    const gridCellHeight = 70;
     const paddingX = window.innerWidth * 0.3;
     const paddingY = window.innerHeight * 0.2;
     const usableWidth = window.innerWidth - 2 * paddingX;
@@ -151,7 +151,7 @@ allLinks.forEach((link, idx) => {
       if (previewId) {
         const modal = document.getElementById(previewId);
         if (modal) {
-          // Assign a random top position (e.g., between 30px and window.innerHeight - 400px)
+          // Assign a random top position (px)
           const minTop = 25;
           const maxTop = 440;
           const randomTop = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
@@ -251,9 +251,25 @@ layoutToggle.addEventListener("click", () => {
 
   assignGridPositions();
 
-  allLinks.forEach((link) => {
-    link.addEventListener("mouseover", () => shufflePositions(link));
+
+
+//---------------------------------------------------------------------------------------
+// Shuffle positions on hover with a cooldown on the shuffling for ease of use
+
+let canShuffle = true;
+
+allLinks.forEach((link) => {
+  link.addEventListener("mouseover", () => {
+    if (!canShuffle) return; // Prevent shuffling if not allowed
+
+    canShuffle = false;
+    shufflePositions(link);
+
+    setTimeout(() => {
+      canShuffle = true;
+    }, 3000);
   });
+});
 
 //---------------------------------------------------------------------------------------
 // Mobile Layout

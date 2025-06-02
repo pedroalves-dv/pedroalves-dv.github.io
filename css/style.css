@@ -170,7 +170,7 @@ cursor: url("../assets/icons/spray-24-white.png"), auto;
 .header-link:hover,
 main a:hover {
   filter: invert(60%);
-  z-index: 99;
+  z-index: 999;
 }
 
 .dark-mode-toggle img,
@@ -183,22 +183,26 @@ main a:hover {
   align-items: center;
 }
 
+/* Main Links  */
 main {
   transition: opacity 0.5s ease-in-out;
 }
-/* Main Links  */
+
 main a {
   color: var(--text-color);
+  width: 200px;
+  height: 70px;
   pointer-events: auto;
+  text-decoration: none;
+  transition: transform 1s ease, filter 0.3s ease-in-out;
+  z-index: 99;
+  position: absolute;
+  /* top: 0;
+  left: 0; */
   display: inline-block;
   text-align: center;
-  text-decoration: none;
-  transition: transform 1s ease, letter-spacing 0.3s ease, font-style 0.3s ease, filter 0.3s ease-in-out;
-  z-index: 99;
-  padding: 1rem;
-  position: absolute;
-  top: 0;
-  left: 0;
+  line-height: 65px;
+  /* border: 1px solid greenyellow; */
 }
 
 
@@ -253,6 +257,7 @@ canvas {
   opacity: 0;          /* start hidden */
   transition: opacity 0.5s ease-in-out; /* fade duration */
   /* border: 1px solid red; */
+  
 }
 
 .projects.fade-in, .info.fade-in {
