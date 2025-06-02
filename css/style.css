@@ -247,7 +247,7 @@ canvas {
   flex-direction: column;
   justify-content: end;
   align-items: start;
-  width: 550px;
+  width: 450px;
   overflow: auto;
   z-index: 999;
   opacity: 0;          /* start hidden */
