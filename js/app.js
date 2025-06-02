@@ -267,7 +267,7 @@ allLinks.forEach((link) => {
 
     setTimeout(() => {
       canShuffle = true;
-    }, 3000);
+    }, 6000);
   });
 });
 
