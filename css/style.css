@@ -54,11 +54,15 @@ body {
   font-family: "Arimo", serif;
   height: auto;
   min-height: 100vh;
-  cursor: crosshair;
+  cursor: url("../assets/icons/spray-24-black.png"), auto;
   transition: background-color var(--transition-duration),
     color var(--transition-duration) ease-in-out;
   transition: background-color var(--transition-duration),
     color var(--transition-duration);
+}
+
+body.dark-mode {
+cursor: url("../assets/icons/spray-24-white.png"), auto;
 }
 
 .header {
