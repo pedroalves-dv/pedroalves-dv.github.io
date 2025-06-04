@@ -121,7 +121,7 @@ cursor: url("../assets/icons/spray-24-white.png"), auto;
   writing-mode: vertical-lr;
   transform: rotate(180deg);
   -webkit-font-smoothing: antialiased;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
 }
 
 .linkedin div {
