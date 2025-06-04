@@ -121,6 +121,7 @@ function generateGridPositions() {
       const position = availablePositions.splice(randomIndex, 1)[0];
       assignedPositions.set(link, position);
       link.style.transform = `translate(${position.x}px, ${position.y}px)`;
+      link.style.opacity = "1";
     });
   }
 
@@ -157,12 +158,16 @@ allLinks.forEach((link, idx) => {
   link.setAttribute("data-preview-id", `preview-modal-link${idx + 1}`);
   link.addEventListener("mouseenter", () => {
     if (!isStraightLayout) {
+      const previewId = link.getAttribute("data-preview-id");
+      // If the current modal is already showing, do nothing
+      if (currentPreviewModal && currentPreviewModal.id === previewId && !currentPreviewModal.classList.contains("hidden")) {
+        return;
+      }
       // Hide previous modal
       if (currentPreviewModal) {
         currentPreviewModal.classList.add("hidden");
       }
       // Show new modal
-      const previewId = link.getAttribute("data-preview-id");
       if (previewId) {
         const modal = document.getElementById(previewId);
         if (modal) {
@@ -296,41 +301,40 @@ function showGridCells() {
 }
 
   assignGridPositions();
-//---------------------------------------------------------------------------------------
+  
+  // Makes the links appear instead of slide in on First visit/Page reload 
+  // Force a reflow so the browser applies the transform instantly
+  void main.offsetHeight;
 
+  // Enable the transition for future shuffles
+  allLinks.forEach(link => {
+    link.style.transition = "transform 1s ease, color .5s ease-in-out, opacity 0.5s";
+});
+
+//---------------------------------------------------------------------------------------
+// Show Grid Cells for Debugging (uncomment to use)
   // showGridCells()
 
 
 //---------------------------------------------------------------------------------------
-// Shuffle positions on hover with a cooldown on the shuffling for ease of use
+// Puts a cooldown on shuffling links
+// This prevents the links from being shuffled too frequently
 
 let canShuffle = true;
 
 allLinks.forEach((link) => {
   link.addEventListener("mouseover", () => {
-    if (!canShuffle) return; // Prevent shuffling if not allowed
+    if (!canShuffle) return;
 
     canShuffle = false;
     shufflePositions(link);
 
     setTimeout(() => {
       canShuffle = true;
-    }, 6000);
+    }, 10000);
   });
 });
 
-//---------------------------------------------------------------------------------------
-// Change link colors on hover (random)
-
-// allLinks.forEach(link => {
-//   link.addEventListener("mouseenter", () => {
-//     const randomColor = `hsl(${Math.floor(Math.random()*360)}, 80%, 50%)`;
-//     link.style.color = randomColor;
-//   });
-//   link.addEventListener("mouseleave", () => {
-//     link.style.color = ""; // Reset on mouse out
-//   });
-// });
 
 //---------------------------------------------------------------------------------------
 // Change link colors on hover (saturated colors)

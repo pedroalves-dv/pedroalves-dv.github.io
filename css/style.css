@@ -127,7 +127,7 @@ cursor: url("../assets/icons/spray-24-white.png"), auto;
 .linkedin div {
   display: flex;
   flex-direction: column;
-  /* justify-content: stzar; */
+  /* justify-content: start; */
   /* align-items: start; */
   margin: 0;
   padding: 0;
@@ -187,24 +187,34 @@ body:not(.dark-mode) .dragon-slayer-card img {
 
 main {
   transition: opacity 0.5s ease-in-out;
+  /* position: relative; */
 }
 
 main a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Radio Canada Big", sans-serif;
-  font-size: 6rem;
+  font-size: 5.5rem;
   letter-spacing: -6px;
   color: var(--text-color);
-  width: 200px;
+  width: 100px;
   height: 70px;
   pointer-events: auto;
   text-decoration: none;
-  transition: transform 1s ease, color 0.3s ease-in-out;
+  transition: color .5s ease-in-out, opacity 0.5s;
+  opacity: 0;
   z-index: 9998;
   position: absolute;
-  display: inline-block;
-  line-height: 65px;
+  line-height: 70px;
   /* border: 1px solid greenyellow; */
 }
+
+/* main.ready a {
+  opacity: 1;
+  pointer-events: auto;
+
+} */
 
 main a:hover {
   z-index: 9999;
