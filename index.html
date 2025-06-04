@@ -6,6 +6,11 @@
     <title>Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>
+      if (localStorage.getItem("dark-mode") === "enabled") {
+        document.body.classList.add("dark-mode");
+      }
+    </script>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
   </head>
@@ -61,7 +66,7 @@
         data-alt="Pixel Painter"
         >01</a
       >
-   
+
       <a
         class="scattered-link"
         data-preview-id="preview-modal-link2"
@@ -74,7 +79,7 @@
         data-alt="Meridian"
         >02</a
       >
-         <a
+      <a
         class="scattered-link"
         data-preview-id="preview-modal-link3"
         rel="preload"
@@ -155,7 +160,7 @@
       <div class="preview-title">01—Pixel Painter</div>
       <img src="assets/images/pixel_painter.jpg" alt="Preview 1" width="400" />
     </div>
-  
+
     <div class="preview-modal hidden" id="preview-modal-link2">
       <div class="preview-title">03—Meridian</div>
       <img src="assets/images/meridian.jpg" alt="Preview 2" width="400" />
@@ -163,7 +168,11 @@
 
     <div class="preview-modal hidden" id="preview-modal-link3">
       <div class="preview-title">02—Global Exchange Tool</div>
-      <img src="assets/old/currency_converter.jpg" alt="Preview 3" width="400" />
+      <img
+        src="assets/old/currency_converter.jpg"
+        alt="Preview 3"
+        width="400"
+      />
     </div>
 
     <div class="preview-modal hidden" id="preview-modal-link4">
