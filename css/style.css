@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -27,38 +31,28 @@ body::-webkit-scrollbar {
 .dark-mode {
   --toggle-text-color: #f0f0f0;
   --toggle-bg-color: #161616;
+  --toggle-bg-color: #191919;
+  /* --toggle-bg-color: #1f1f1f; */
   --transition-duration: 0.4s;
 }
 
-
-html,
 body {
   background-color: var(--toggle-bg-color);
   color: var(--toggle-text-color);
-  /* -ms-overflow-style: none; */
-  scrollbar-width: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100vh;
-}
-
-body, a, p, div {
+  font-size: 14px;
+  /* font-size: 15px; */
   font-size: .9rem;
   -webkit-font-smoothing: antialiased;
-}
-
-body {
-  font-family: "Inter", serif;
-  font-family: sans-serif;
   font-family: "Arimo", serif;
+  /* font-family: "Nunito", sans-serif; */
+  /* font-family: "Familjen Grotesk", sans-serif; */
+  /* font-family: "Radio Canada Big", sans-serif; */
+  /* font-weight: 500; */
   height: auto;
   min-height: 100vh;
   cursor: url("../assets/icons/spray-24-black.png"), auto;
   transition: background-color var(--transition-duration),
     color var(--transition-duration) ease-in-out;
-  transition: background-color var(--transition-duration),
-    color var(--transition-duration);
 }
 
 body.dark-mode {
@@ -87,7 +81,7 @@ cursor: url("../assets/icons/spray-24-white.png"), auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: filter 0.3s ease-in-out;
+  transition: filter 0.2s ease-in-out, color 0.3s ease-in-out;
   color: var(--toggle-text-color);
   padding-right: 20px; 
 }
@@ -138,24 +132,11 @@ cursor: url("../assets/icons/spray-24-white.png"), auto;
   padding-left: 80px;
 }
 
-/* .tumblr {
-  backface-visibility: hidden;
-  will-change: transform;
-  z-index: 99;
-  position: fixed;
-  bottom: 5px;
-  left: 15%;
-  width: auto;
-  height: 40px;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  color: var(--text-color);
-  transform: scale(-1, -1);
-  transform: rotate(180deg) translateZ(0);
-  -webkit-font-smoothing: antialiased;
+body:not(.dark-mode) #preview-modal-link4 img,
+body:not(.dark-mode) .dragon-slayer-card img {
+  border: 1px solid rgb(219, 219, 219);
 
-} */
+}
 
 .dark-mode-toggle,
 .layout-toggle {
@@ -167,8 +148,7 @@ cursor: url("../assets/icons/spray-24-white.png"), auto;
 
 .dark-mode-toggle img:hover,
 .layout-toggle img:hover,
-.header-link:hover,
-main a:hover {
+.header-link:hover {
   filter: invert(60%);
   z-index: 999;
 }
@@ -189,41 +169,36 @@ main {
 }
 
 main a {
+  font-family: "Radio Canada Big", sans-serif;
+  font-size: 6rem;
+  letter-spacing: -6px;
   color: var(--text-color);
   width: 200px;
   height: 70px;
   pointer-events: auto;
   text-decoration: none;
-  transition: transform 1s ease, filter 0.3s ease-in-out;
-  z-index: 99;
+  transition: transform 1s ease, color 0.3s ease-in-out;
+  z-index: 9998;
   position: absolute;
-  /* top: 0;
-  left: 0; */
   display: inline-block;
-  text-align: center;
   line-height: 65px;
   /* border: 1px solid greenyellow; */
 }
 
+main a:hover {
+  z-index: 9999;
+}
 
 /* Canvas */
 .canvas-container {
-  position: fixed; /* or absolute, but typically fixed for a background */
+  position: fixed;
   top: 0;
   left: 0;
-  display: flex;
+  /* display: flex; */
   width: 100vw;
   height: 100vh;
   z-index: 1;
-}
-
-canvas {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  background-color: transparent;
-  background: none;
-  /* z-index: 1; */
+  /* border: 1px solid greenyellow */
 }
 
 /* Straight Layout */
@@ -233,14 +208,10 @@ canvas {
   justify-content: end;
   align-items: start;
   gap: 10px;
-  /* position: relative; */
   background: none;
   pointer-events: none;
-   /* transition: opacity 0.8s ease-in-out, visibility 0.4s ease-in-out;
-  opacity: 1; */
-  /* z-index: 2; */
-  /* border: 1px solid blue; */
   padding-top: 35px;
+  /* border: 1px solid blue; */
 }
 
 
@@ -254,14 +225,13 @@ canvas {
   width: 450px;
   overflow: auto;
   z-index: 999;
-  opacity: 0;          /* start hidden */
+  opacity: 0;         
   transition: opacity 0.5s ease-in-out; /* fade duration */
   /* border: 1px solid red; */
-  
 }
 
 .projects.fade-in, .info.fade-in {
-  opacity: 1; /* they fade from 0 to 1 */
+  opacity: 1;
 }
 
 .projects a {
@@ -315,17 +285,23 @@ h3 {
 }
 
 .preview-modal {
-  position: fixed;
-  top: 25px;
-  right: 125px;
-  max-width: 300px;
-  max-height: 400px;
-  object-fit: contain;
+  position: absolute;
+  top: 0;
+  right: 0;
   z-index: 99;
   cursor: pointer;
 }
 
-/* Example: For screens <= 600px wide */
+.preview-title {
+  font-size: .9rem;
+  padding-bottom: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  /* border: 1px solid red; */
+}
+
+/* Mobile Layout */
 @media (max-width: 1440px) {
   .scattered-layout {
     display: none !important;

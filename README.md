@@ -1,6 +1,6 @@
 # Portfolio
 
-This site showcases various projects I have worked on, along with a few interactive features to enhance the user experience.
+This site showcases various projects I have worked on, along with a few, fun interactive feature.
 
 ## Live Demo
 
@@ -32,30 +32,30 @@ This site showcases various projects I have worked on, along with a few interact
 
 ## Projects
 
-### 🎨 Pixel Painter
+### Pixel Painter
 
 - **Description**: A pixel art drawing application.
 - **Link**: [Pixel Painter](https://pedroalves-dv.github.io/pixelpainter/)
 
-### 💵 Cash Register App
+### Meridian
 
-- **Description**: An application to manage cash transactions.
-- **Link**: [Cash Register App](https://pedroalves-dv.github.io/cash-register/)
+- **Description**: A time tracker for global timezones.
+- **Link**: [Meridian](https://meridian-time.vercel.app/)
 
-### 🐉 RPG Mini Game
-
-- **Description**: A small role-playing game.
-- **Link**: [RPG Mini Game](https://pedroalves-dv.github.io/dragon-repeller/)
-
-### 💱 Currency Converter
+### Currency Converter
 
 - **Description**: An application to convert currencies.
 - **Link**: [Currency Converter](https://pedroalves-dv.github.io/euro-converter/)
 
-### 📝 Tumblr
+### RPG Mini Game
 
-- **Description**: A link to my Tumblr blog.
-- **Link**: [Tumblr](https://pedroalvesmadeira.tumblr.com/)
+- **Description**: A small role-playing game.
+- **Link**: [RPG Mini Game](https://pedroalves-dv.github.io/dragon-repeller/)
+
+### Cash Register App
+
+- **Description**: An application to manage cash transactions.
+- **Link**: [Cash Register App](https://pedroalves-dv.github.io/cash-register/)
 
 ## Technologies Used
 
@@ -66,7 +66,7 @@ This site showcases various projects I have worked on, along with a few interact
 
 ## License
 
-This project is licensed under the MIT License.
+MIT
 
 ## Contact
 

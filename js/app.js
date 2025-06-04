@@ -6,6 +6,8 @@
   function setCanvasSize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
   }
 
   setCanvasSize();
@@ -76,27 +78,40 @@
 
 //---------------------------------------------------------------------------------------
 // Scattered Layout
-  function generateGridPositions() {
-    const gridCellWidth = 200;
-    const gridCellHeight = 70;
-    const paddingX = window.innerWidth * 0.3;
-    const paddingY = window.innerHeight * 0.2;
-    const usableWidth = window.innerWidth - 2 * paddingX;
-    const usableHeight = window.innerHeight - 2 * paddingY;
-    const columns = Math.floor(usableWidth / gridCellWidth);
-    const rows = Math.floor(usableHeight / gridCellHeight);
+function generateGridPositions() {
+  const gridCellWidth = 200;
+  const gridCellHeight = 70;
 
-    let positions = [];
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < columns; col++) {
-        positions.push({
-          x: paddingX + col * gridCellWidth,
-          y: paddingY + row * gridCellHeight,
-        });
-      }
+  // Customize these to control grid position
+  const paddingTop = 70;
+  const paddingRight = 300;
+  const paddingBottom = 150;
+  const paddingLeft = 100;
+
+  const usableWidth = window.innerWidth - paddingLeft - paddingRight;
+  const usableHeight = window.innerHeight - paddingTop - paddingBottom;
+  const columns = Math.floor(usableWidth / gridCellWidth);
+  const rows = Math.floor(usableHeight / gridCellHeight);
+
+  // Calculate the actual grid size
+  const gridWidth = columns * gridCellWidth;
+  const gridHeight = rows * gridCellHeight;
+
+  // Center the grid within the padded area
+  const startX = paddingLeft + (usableWidth - gridWidth) / 2;
+  const startY = paddingTop + (usableHeight - gridHeight) / 2;
+
+  let positions = [];
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < columns; col++) {
+      positions.push({
+        x: startX + col * gridCellWidth,
+        y: startY + row * gridCellHeight,
+      });
     }
-    return positions;
   }
+  return positions;
+}
 
   function assignGridPositions() {
     let availablePositions = [...generateGridPositions()];
@@ -156,7 +171,7 @@ allLinks.forEach((link, idx) => {
           const maxTop = 440;
           const randomTop = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
           modal.style.top = `${randomTop}px`;
-          modal.style.right = "125px"; // keep right fixed
+          modal.style.right = "30px"; // keep right fixed
 
           modal.classList.remove("hidden");
           // Make modal clickable: open the link in a new tab
@@ -179,18 +194,26 @@ function populateStraightLayout() {
 
 
   allLinks.forEach((link) => {
+    // Get the alt text from the data-alt
+    const altText = link.getAttribute("data-alt")
+
     const card = document.createElement("div");
     card.classList.add("card");
-    const slug = link.textContent.toLowerCase().replace(/\s+/g, '-');
+    // Creates a slug from the alt text for the card class
+    const slug = altText.toLowerCase().replace(/\s+/g, '-');
     card.classList.add(`${slug}-card`);
+
+  
+
     card.innerHTML = `
       <a href="${link.href}" target="_blank">
-        <img src="${link.getAttribute("data-screenshot")}" alt="${link.textContent}">
+        <img src="${link.getAttribute("data-screenshot")}" alt="${altText}">
         <div class="card-content">
-          <h3 class="indent-card">${link.textContent.toUpperCase()}</h3>
+          <h3 class="indent-card">${altText.toUpperCase()}</h3>
           <p>${link.getAttribute("data-description")}</p>
         </div>
       </a>`;
+
     projects.appendChild(card);
     link.style.display = "none";
     requestAnimationFrame(() => {
@@ -249,8 +272,33 @@ layoutToggle.addEventListener("click", () => {
   }
 });
 
-  assignGridPositions();
+//---------------------------------------------------------------------------------------
+// Show Grid Cells for Debugging
 
+function showGridCells() {
+  // Remove any previous grid overlays
+  document.querySelectorAll('.grid-debug-cell').forEach(el => el.remove());
+
+  const gridCells = generateGridPositions();
+  gridCells.forEach(cell => {
+    const div = document.createElement('div');
+    div.className = 'grid-debug-cell';
+    div.style.position = 'absolute';
+    div.style.left = `${cell.x}px`;
+    div.style.top = `${cell.y}px`;
+    div.style.width = '200px';   // match gridCellWidth
+    div.style.height = '70px';   // match gridCellHeight
+    div.style.border = '1px dashed #ff00ff';
+    div.style.pointerEvents = 'none'; // so it doesn't block links
+    div.style.zIndex = 1; // behind your links
+    document.body.appendChild(div);
+  });
+}
+
+  assignGridPositions();
+//---------------------------------------------------------------------------------------
+
+  // showGridCells()
 
 
 //---------------------------------------------------------------------------------------
@@ -268,6 +316,48 @@ allLinks.forEach((link) => {
     setTimeout(() => {
       canShuffle = true;
     }, 6000);
+  });
+});
+
+//---------------------------------------------------------------------------------------
+// Change link colors on hover (random)
+
+// allLinks.forEach(link => {
+//   link.addEventListener("mouseenter", () => {
+//     const randomColor = `hsl(${Math.floor(Math.random()*360)}, 80%, 50%)`;
+//     link.style.color = randomColor;
+//   });
+//   link.addEventListener("mouseleave", () => {
+//     link.style.color = ""; // Reset on mouse out
+//   });
+// });
+
+//---------------------------------------------------------------------------------------
+// Change link colors on hover (saturated colors)
+
+
+const saturatedColors = [
+  "#ff0000", // red
+  "#ff8000", // orange
+  "#ffff00", // yellow
+  "#80ff00", // lime
+  "#00ff00", // green
+  "#00ff80", // spring green
+  "#00ffff", // cyan
+  "#0080ff", // azure
+  "#0000ff", // blue
+  "#8000ff", // violet
+  "#ff00ff", // magenta
+];
+
+
+allLinks.forEach(link => {
+  link.addEventListener("mouseenter", () => {
+    const randomColor = saturatedColors[Math.floor(Math.random() * saturatedColors.length)];
+    link.style.color = randomColor;
+  });
+  link.addEventListener("mouseleave", () => {
+    link.style.color = ""; // Reset on mouse out
   });
 });
 
