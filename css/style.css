@@ -106,27 +106,29 @@ cursor: url("../assets/icons/spray-24-white.png"), auto;
 /* Side Link (Linkedin) */
 
 .linkedin {
-  backface-visibility: hidden;
-  will-change: transform;
+  /* backface-visibility: hidden; */
+  /* will-change: transform; */
   z-index: 99;
   position: fixed;
   bottom: 40vh;
-  left: 20px;
+  left: 0;
   width: auto;
   height: auto;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: start;
+  align-items: start; */
   color: var(--text-color);
-  writing-mode: sideways-lr;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
   -webkit-font-smoothing: antialiased;
+  border: 1px solid blue;
 }
 
 .linkedin div {
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: start;
+  /* justify-content: stzar; */
+  /* align-items: start; */
   margin: 0;
   padding: 0;
 }
@@ -293,6 +295,10 @@ h3 {
 
 .indent-card {
   padding-left: 80px;
+}
+
+.indent-link {
+  padding-top: 40px;
 }
 
 .hidden {
