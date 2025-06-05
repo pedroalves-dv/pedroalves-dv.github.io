@@ -42,10 +42,12 @@
   const layoutToggle = document.querySelector(".layout-toggle");
   const darkModeToggle = document.querySelector(".dark-mode-toggle");
   const body = document.body;
+  const html = document.documentElement;
   let isDarkMode = localStorage.getItem("dark-mode") === "enabled";
 
   function updateDarkMode() {
-    body.classList.toggle("dark-mode", isDarkMode);
+    // body.classList.toggle("dark-mode", isDarkMode);
+    html.classList.toggle("dark-mode", isDarkMode);
     const filterValue = isDarkMode ? "invert(0)" : "invert(1)";
     layoutToggle.style.filter = filterValue;
     darkModeToggle.style.filter = filterValue;

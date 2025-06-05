@@ -23,6 +23,7 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+
 :root {
   --toggle-text-color: #161616;
   --toggle-bg-color: #ffffff;
@@ -38,7 +39,7 @@ body::-webkit-scrollbar {
 .dark-mode {
   --toggle-text-color: #f0f0f0;
   --toggle-bg-color: #161616;
-  --toggle-bg-color: #191919;
+  /* --toggle-bg-color: #191919; */
   --transition-duration: 0.4s;
 }
 
@@ -57,8 +58,8 @@ body {
     color var(--transition-duration) ease-in-out;
 }
 
-body.dark-mode {
-cursor: url("../assets/icons/spray-24-white.png"), auto;
+html.dark-mode body {
+  cursor: url("../assets/icons/spray-24-white.png"), auto;
 }
 
 /* ========================================================================== */
