@@ -53,14 +53,14 @@ body {
   font-family: "Arimo", serif;
   height: auto;
   min-height: 100vh;
-  cursor: url("../assets/icons/spray-24-black.png"), auto;
+  /* cursor: url("../assets/icons/spray-24-black.png"), auto; */
   transition: background-color var(--transition-duration),
     color var(--transition-duration) ease-in-out;
 }
 
-html.dark-mode body {
+/* html.dark-mode body {
   cursor: url("../assets/icons/spray-24-white.png"), auto;
-}
+} */
 
 /* ========================================================================== */
 /* Header Menu */
@@ -77,7 +77,6 @@ html.dark-mode body {
   padding: 0 15px;
   gap: 15px;
   z-index: 99;
-  
 }
 
 .header-link {
