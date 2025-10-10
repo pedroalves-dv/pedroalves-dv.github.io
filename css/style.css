@@ -53,14 +53,11 @@ body {
   font-family: "Arimo", serif;
   height: auto;
   min-height: 100vh;
-  /* cursor: url("../assets/icons/spray-24-black.png"), auto; */
   transition: background-color var(--transition-duration),
     color var(--transition-duration) ease-in-out;
 }
 
-/* html.dark-mode body {
-  cursor: url("../assets/icons/spray-24-white.png"), auto;
-} */
+
 
 /* ========================================================================== */
 /* Header Menu */
@@ -136,6 +133,8 @@ body {
 /* ========================================================================== */
 /* Dark Mode */
 
+
+
 .dark-mode-toggle,
 .layout-toggle {
   background-color: transparent;
@@ -154,8 +153,8 @@ body {
 .dark-mode-toggle img,
 .layout-toggle img {
   transition: filter 0.3s ease-in-out;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -165,6 +164,11 @@ body:not(.dark-mode) #preview-modal-link4 img,
 body:not(.dark-mode) .dragon-slayer-card img {
   border: 1px solid rgb(219, 219, 219);
 
+}
+
+.dark-mode-toggle img{
+  width: 18px;
+  height: 18px;
 }
 
 
@@ -206,6 +210,8 @@ main a {
   position: absolute;
   line-height: 70px;
   /* border: 1px solid greenyellow; */
+  will-change: transform, opacity;
+  transition: opacity 600ms cubic-bezier(.2,.9,.2,1), transform 600ms cubic-bezier(.2,.9,.2,1), color 600ms ease-in-out;
 }
 
 main a:hover {

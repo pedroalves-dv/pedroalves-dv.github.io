@@ -54,8 +54,8 @@
     const darkModeIcon = darkModeToggle.querySelector("img");
   if (darkModeIcon) {
     darkModeIcon.src = isDarkMode
-      ? "assets/images/straight-layout.png"
-      : "assets/images/scattered-layout.png";
+      ? "assets/images/light-mode-icon.png"
+      : "assets/images/light-mode-icon.png";
     darkModeIcon.alt = isDarkMode ? "Disable Dark Mode" : "Enable Dark Mode";
   }
     localStorage.setItem("dark-mode", isDarkMode ? "enabled" : "disabled");
@@ -263,7 +263,6 @@ layoutToggle.addEventListener("click", () => {
     document.body.style.overflow = "auto";
     populateStraightLayout();
 
-    // document.body.style.overflow = "hidden";
   } else {
     projects.classList.remove("fade-in");
     info.classList.remove("fade-in");
@@ -319,7 +318,8 @@ function showGridCells() {
 
   // Enable the transition for future shuffles
   allLinks.forEach(link => {
-    link.style.transition = "transform 1s ease, color .3s ease-in-out, opacity 0.5s";
+  // Match preview modal easing/duration for a cohesive feel
+  link.style.transition = "transform 600ms cubic-bezier(.2,.9,.2,1), color 600ms ease-in-out, opacity 600ms cubic-bezier(.2,.9,.2,1)";
 });
 
 //---------------------------------------------------------------------------------------
