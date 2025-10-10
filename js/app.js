@@ -64,19 +64,66 @@
   updateDarkMode();
 
   darkModeToggle.addEventListener("click", () => {
-    isDarkMode = !isDarkMode;
-    updateDarkMode();
+      // Temporarily disable transitions site-wide to avoid intermediate colors
+      document.documentElement.classList.add('no-transition');
+      const headerEl = document.querySelector('.header');
+      if (headerEl) headerEl.classList.add('no-transition');
+
+      isDarkMode = !isDarkMode;
+      updateDarkMode();
+
+      // Force a repaint and remove the helper so other transitions remain smooth
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.documentElement.classList.remove('no-transition');
+          if (headerEl) headerEl.classList.remove('no-transition');
+        }, 60);
+      });
   });
 
 //---------------------------------------------------------------------------------------
 // Layouts
-  const allLinks = document.querySelectorAll("main a");
+  // Select scattered links by class so selection remains valid even if we reparent them
+  let allLinks = document.querySelectorAll("a.scattered-link");
   const main = document.querySelector("main");
   const straightLayoutContainer = document.querySelector(".straight-layout-container");
   const projects = document.querySelector(".projects");
   const info = document.querySelector(".info");
   let isStraightLayout = false;
   let assignedPositions = new Map();
+
+// Create an overlay container appended at the end of <body> so links paint above the canvas
+let overlayLinks = document.querySelector('.overlay-links');
+if (!overlayLinks) {
+  overlayLinks = document.createElement('div');
+  overlayLinks.className = 'overlay-links';
+  // keep it non-blocking by default; links inside will re-enable pointer-events
+  overlayLinks.style.position = 'fixed';
+  overlayLinks.style.inset = '0';
+  overlayLinks.style.pointerEvents = 'none';
+  overlayLinks.style.zIndex = '9999';
+  document.body.appendChild(overlayLinks);
+}
+
+function moveLinksToOverlay() {
+  const links = Array.from(document.querySelectorAll('a.scattered-link'));
+  links.forEach(link => {
+    overlayLinks.appendChild(link);
+    // enable interaction on the link itself
+    link.style.pointerEvents = 'auto';
+  });
+  // refresh NodeList
+  allLinks = document.querySelectorAll('a.scattered-link');
+}
+
+function moveLinksToMain() {
+  const links = Array.from(overlayLinks.querySelectorAll('a.scattered-link'));
+  links.forEach(link => {
+    main.appendChild(link);
+    link.style.pointerEvents = '';
+  });
+  allLinks = document.querySelectorAll('a.scattered-link');
+}
 
 //---------------------------------------------------------------------------------------
 // Scattered Layout
@@ -273,11 +320,23 @@ layoutToggle.addEventListener("click", () => {
     main.classList.add("fade-in");
     layoutToggle.innerHTML = `<img src="assets/images/scattered.png" alt="Scattered Layout">`;
 
+    // Ensure links are rendered in the overlay (so they appear above the canvas)
+    moveLinksToOverlay();
+
+    // Prepare links to re-appear smoothly and be interactive
     allLinks.forEach((link) => {
       link.style.display = "block";
+      link.style.opacity = "0";
+      link.style.pointerEvents = 'auto';
     });
 
     assignGridPositions();
+
+    // Force reflow then fade in
+    void main.offsetHeight;
+    requestAnimationFrame(() => {
+      allLinks.forEach((link) => link.style.opacity = '1');
+    });
 
     // Disable scroll for scattered layout
     document.body.style.overflow = "hidden";
@@ -320,8 +379,8 @@ function showGridCells() {
 
   // Enable the transition for future shuffles
   allLinks.forEach(link => {
-  // Match preview modal easing/duration for a cohesive feel
-  link.style.transition = "transform 600ms cubic-bezier(.2,.9,.2,1), color 600ms ease-in-out, opacity 600ms cubic-bezier(.2,.9,.2,1)";
+  // Match preview modal easing/duration for movement; keep color snappy (200ms)
+  link.style.transition = "transform 600ms cubic-bezier(.2,.9,.2,1), color 200ms linear, opacity 600ms cubic-bezier(.2,.9,.2,1)";
 });
 
 //---------------------------------------------------------------------------------------

@@ -37,11 +37,13 @@ body::-webkit-scrollbar {
 }
 
 .dark-mode {
-  --toggle-text-color: #f0f0f0;
+  --toggle-text-color: #ffffff;
   --toggle-bg-color: #161616;
   /* --toggle-bg-color: #191919; */
   --transition-duration: 0.4s;
 }
+
+
 
 /* ========================================================================== */
 
@@ -51,6 +53,7 @@ body {
   font-size: .9rem;
   -webkit-font-smoothing: antialiased;
   font-family: "Arimo", serif;
+  /* font-family: "Inter", "Radio Canada Big", sans-serif; */
   height: auto;
   min-height: 100vh;
   transition: background-color var(--transition-duration),
@@ -103,8 +106,6 @@ body {
 /* Side Link (Linkedin) */
 
 .linkedin {
-  /* backface-visibility: hidden; */
-  /* will-change: transform; */
   z-index: 99;
   position: fixed;
   bottom: 40vh;
@@ -112,9 +113,7 @@ body {
   width: auto;
   height: auto;
   display: flex;
-  /* justify-content: start;
-  align-items: start; */
-  color: var(--text-color);
+  color: var(--toggle-text-color);
   writing-mode: vertical-lr;
   transform: rotate(180deg);
   -webkit-font-smoothing: antialiased;
@@ -124,8 +123,6 @@ body {
 .linkedin div {
   display: flex;
   flex-direction: column;
-  /* justify-content: start; */
-  /* align-items: start; */
   margin: 0;
   padding: 0;
 }
@@ -179,7 +176,6 @@ body:not(.dark-mode) .dragon-slayer-card img {
   position: fixed;
   top: 0;
   left: 0;
-  /* display: flex; */
   width: 100vw;
   height: 100vh;
   z-index: 1;
@@ -189,34 +185,36 @@ body:not(.dark-mode) .dragon-slayer-card img {
 /* ========================================================================== */
 /* Main Links (Scattered Layout) */
 
-main {
-  transition: opacity 0.5s ease-in-out;
-  /* position: relative; */
-}
-
+ 
+/* allow styles to apply whether links are in <main> or moved into the overlay */
+.scattered-link,
 main a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Radio Canada Big", sans-serif;
-  font-size: 5.5rem;
-  letter-spacing: -6px;
+  font-family: "Inter", "Radio Canada Big", sans-serif;
+  font-weight: 400;
+  font-size: 2.3rem;
+  letter-spacing: -2px;
   color: var(--text-color);
-  width: 100px;
-  height: 70px;
+  width: 60px;
+  height: 50px;
   pointer-events: auto;
   text-decoration: none;
   z-index: 9998;
   position: absolute;
-  line-height: 70px;
-  /* border: 1px solid greenyellow; */
-  will-change: transform, opacity;
-  transition: opacity 600ms cubic-bezier(.2,.9,.2,1), transform 600ms cubic-bezier(.2,.9,.2,1), color 600ms ease-in-out;
+  line-height: 50px;
+  text-align: center;
+  padding: 0 4px 4px 0;
+  transition: transform 600ms cubic-bezier(.2,.9,.2,1), color 200ms linear, opacity 600ms cubic-bezier(.2,.9,.2,1);
+  /* border: 1px solid green; */
 }
 
+main a:first-child {
+  letter-spacing: -1px;
+}
+
+.scattered-link:hover,
 main a:hover {
   z-index: 9999;
-  color: rgb(160, 160, 160);
+  color: rgb(110, 110, 110);
 }
 
 
@@ -247,11 +245,11 @@ main a:hover {
   overflow: auto;
   z-index: 999;
   opacity: 0;         
-  transition: opacity 0.5s ease-in-out; /* fade duration */
+  transition: opacity 0.5s ease-in-out;
   /* border: 1px solid red; */
 }
 
-.projects.fade-in, .info.fade-in {
+.fade-in {
   opacity: 1;
 }
 
@@ -313,7 +311,6 @@ h3 {
 .hidden {
   pointer-events: none;
   opacity: 0;
-  /* transition: opacity 0.3s ease-in-out; */
 }
 
 /* ========================================================================== */
