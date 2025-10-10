@@ -314,7 +314,7 @@ h3 {
 .hidden {
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  /* transition: opacity 0.3s ease-in-out; */
 }
 
 /* ========================================================================== */
