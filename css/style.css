@@ -202,22 +202,15 @@ main a {
   height: 70px;
   pointer-events: auto;
   text-decoration: none;
-  transition: color .5s ease-in-out, opacity 0.5s;
-  opacity: 0;
   z-index: 9998;
   position: absolute;
   line-height: 70px;
   /* border: 1px solid greenyellow; */
 }
 
-/* main.ready a {
-  opacity: 1;
-  pointer-events: auto;
-
-} */
-
 main a:hover {
   z-index: 9999;
+  color: rgb(160, 160, 160);
 }
 
 
@@ -322,10 +315,30 @@ h3 {
 
 .preview-modal {
   position: absolute;
+  width: 400px;
   top: 0;
   right: 0;
   z-index: 99;
   cursor: pointer;
+  /* Start hidden by default and animate into view when .show is added */
+  opacity: 0;
+  transform: translateX(10px) translateY(0) scale(0.99);
+  pointer-events: none;
+  transition: opacity 360ms cubic-bezier(.2,.9,.2,1),
+              transform 360ms cubic-bezier(.2,.9,.2,1);
+  will-change: opacity, transform;
+}
+
+.preview-modal.show {
+  opacity: 1;
+  transform: translateX(0) translateY(0) scale(1);
+  pointer-events: auto; /* clickable only when visible */
+}
+
+.preview-modal.hidden {
+  /* More-specific hidden state for preview modals so generic .hidden remains usable */
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .preview-title {
@@ -335,6 +348,10 @@ h3 {
   display: flex;
   justify-content: end;
   /* border: 1px solid red; */
+}
+
+.preview-img {
+  margin-bottom: 5px;
 }
 
 /* ========================================================================== */

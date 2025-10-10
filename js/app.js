@@ -167,6 +167,8 @@ allLinks.forEach((link, idx) => {
       }
       // Hide previous modal
       if (currentPreviewModal) {
+        // hide previous modal with transition
+        currentPreviewModal.classList.remove("show");
         currentPreviewModal.classList.add("hidden");
       }
       // Show new modal
@@ -175,12 +177,17 @@ allLinks.forEach((link, idx) => {
         if (modal) {
           // Assign a random top position (px)
           const minTop = 25;
-          const maxTop = 440;
+          const maxTop = 300;
           const randomTop = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
           modal.style.top = `${randomTop}px`;
           modal.style.right = "30px"; // keep right fixed
 
+          // Ensure hidden class removed then force reflow so the transition runs
           modal.classList.remove("hidden");
+          // Force reflow to make sure browser registers the start state before adding .show
+          void modal.offsetHeight;
+          modal.classList.add("show");
+
           // Make modal clickable: open the link in a new tab
           modal.onclick = (e) => {
             e.stopPropagation();
@@ -241,7 +248,9 @@ layoutToggle.addEventListener("click", () => {
   isStraightLayout = !isStraightLayout;
 
   if (currentPreviewModal) {
-    currentPreviewModal.classList.add("hidden");
+    currentPreviewModal.classList.remove("show");
+  currentPreviewModal.classList.remove("show");
+  currentPreviewModal.classList.add("hidden");
     currentPreviewModal = null;
   }
 
@@ -310,7 +319,7 @@ function showGridCells() {
 
   // Enable the transition for future shuffles
   allLinks.forEach(link => {
-    link.style.transition = "transform 1s ease, color .5s ease-in-out, opacity 0.5s";
+    link.style.transition = "transform 1s ease, color .3s ease-in-out, opacity 0.5s";
 });
 
 //---------------------------------------------------------------------------------------
@@ -333,7 +342,7 @@ allLinks.forEach((link) => {
 
     setTimeout(() => {
       canShuffle = true;
-    }, 10000);
+    }, 5000);
   });
 });
 
@@ -342,30 +351,30 @@ allLinks.forEach((link) => {
 // Change link colors on hover (saturated colors)
 
 
-const saturatedColors = [
-  "#ff0000", // red
-  "#ff8000", // orange
-  "#ffff00", // yellow
-  "#80ff00", // lime
-  "#00ff00", // green
-  "#00ff80", // spring green
-  "#00ffff", // cyan
-  "#0080ff", // azure
-  "#0000ff", // blue
-  "#8000ff", // violet
-  "#ff00ff", // magenta
-];
+// const saturatedColors = [
+//   "#ff0000", // red
+//   "#ff8000", // orange
+//   "#ffff00", // yellow
+//   "#80ff00", // lime
+//   "#00ff00", // green
+//   "#00ff80", // spring green
+//   "#00ffff", // cyan
+//   "#0080ff", // azure
+//   "#0000ff", // blue
+//   "#8000ff", // violet
+//   "#ff00ff", // magenta
+// ];
 
 
-allLinks.forEach(link => {
-  link.addEventListener("mouseenter", () => {
-    const randomColor = saturatedColors[Math.floor(Math.random() * saturatedColors.length)];
-    link.style.color = randomColor;
-  });
-  link.addEventListener("mouseleave", () => {
-    link.style.color = ""; // Reset on mouse out
-  });
-});
+// allLinks.forEach(link => {
+//   link.addEventListener("mouseenter", () => {
+//     const randomColor = saturatedColors[Math.floor(Math.random() * saturatedColors.length)];
+//     link.style.color = randomColor;
+//   });
+//   link.addEventListener("mouseleave", () => {
+//     link.style.color = ""; // Reset on mouse out
+//   });
+// });
 
 //---------------------------------------------------------------------------------------
 // Mobile Layout
