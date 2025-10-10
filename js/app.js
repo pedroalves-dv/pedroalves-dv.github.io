@@ -89,10 +89,12 @@ function generateGridPositions() {
   const paddingRight = 300;
   const paddingBottom = 150;
   const paddingLeft = 100;
+  // Optionally cap the maximum number of columns (makes the grid narrower)
+  const maxColumns = 5; // change this number to reduce/increase columns
 
   const usableWidth = window.innerWidth - paddingLeft - paddingRight;
   const usableHeight = window.innerHeight - paddingTop - paddingBottom;
-  const columns = Math.floor(usableWidth / gridCellWidth);
+  const columns = Math.min(Math.floor(usableWidth / gridCellWidth), maxColumns);
   const rows = Math.floor(usableHeight / gridCellHeight);
 
   // Calculate the actual grid size
