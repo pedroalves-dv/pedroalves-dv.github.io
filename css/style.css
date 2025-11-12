@@ -322,10 +322,9 @@ h3 {
 /* Preview Modals */
 
 .preview-modal {
-  position: absolute;
-  width: 400px;
+  position: fixed;
+  width: 320px;
   top: 0;
-  right: 0;
   z-index: 99;
   cursor: pointer;
   /* Start hidden by default and animate into view when .show is added */
@@ -335,6 +334,7 @@ h3 {
   transition: opacity 360ms cubic-bezier(.2,.9,.2,1),
               transform 360ms cubic-bezier(.2,.9,.2,1);
   will-change: opacity, transform;
+ font-size: .9rem;
 }
 
 .preview-modal.show {
@@ -353,23 +353,19 @@ h3 {
   font-size: .9rem;
   padding-bottom: 5px;
   width: 100%;
-  display: flex;
-  justify-content: end;
-  /* border: 1px solid red; */
+  margin-bottom: 5px;
 }
 
 .preview-img {
   margin-bottom: 5px;
   display: block;
   transition: transform 130ms cubic-bezier(0.2, 0, 0.2, 1);
+  /* width: 100%;
+  height: auto;
+  max-width: 100%; */
   border-radius: 2px;
 }
 
-.preview-img:hover {
-  transform: translateX(-32px);
-  /* filter: brightness(1.06) contrast(1.02); */
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
-}
 
 /* ========================================================================== */
 /* Mobile Layout */

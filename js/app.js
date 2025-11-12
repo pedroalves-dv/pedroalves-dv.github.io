@@ -132,10 +132,10 @@ function generateGridPositions() {
   const gridCellHeight = 70;
 
   // Customize these to control grid position
-  const paddingTop = 70;
-  const paddingRight = 300;
-  const paddingBottom = 150;
-  const paddingLeft = 100;
+  const paddingTop = 100;
+  const paddingRight = 100;
+  const paddingBottom = 200;
+  const paddingLeft = 350;
   // Optionally cap the maximum number of columns (makes the grid narrower)
   const maxColumns = 5; // change this number to reduce/increase columns
 
@@ -224,16 +224,127 @@ allLinks.forEach((link, idx) => {
       if (previewId) {
         const modal = document.getElementById(previewId);
         if (modal) {
-          // Assign a random top position (px)
-          const minTop = 25;
-          const maxTop = 300;
-          const randomTop = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
-          modal.style.top = `${randomTop}px`;
-          modal.style.right = "30px"; // keep right fixed
+          // Position the modal near the hovered link while avoiding covering
+          // other nearby links. We'll measure the modal, compute a few
+          // candidate positions (right, left, above, below the link), and
+          // pick the first that doesn't intersect other links. If all
+          // intersect, pick the one with minimal overlap area.
 
-          // Ensure hidden class removed then force reflow so the transition runs
+          // Reveal the modal off-screen so we can measure it without flashing
           modal.classList.remove("hidden");
-          // Force reflow to make sure browser registers the start state before adding .show
+          modal.style.left = '-9999px';
+          modal.style.top = '-9999px';
+          modal.style.right = '';
+          // force layout so modal has a proper size
+          void modal.offsetHeight;
+          const mRect = modal.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          const margin = 12;
+
+          // helper to clamp to viewport
+          function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+          const candidates = [];
+          // Right of link (vertically centered)
+          candidates.push({
+            left: clamp(linkRect.right + margin, 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10)
+          });
+          // Left of link
+          candidates.push({
+            left: clamp(linkRect.left - mRect.width - margin, 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10)
+          });
+          // Above link (horizontally centered)
+          candidates.push({
+            left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.top - mRect.height - margin, 10, window.innerHeight - mRect.height - 10)
+          });
+          // Below link
+          candidates.push({
+            left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.bottom + margin, 10, window.innerHeight - mRect.height - 10)
+          });
+
+          function rectsIntersect(a, b) {
+            return !(a.left + a.width < b.left || b.left + b.width < a.left ||
+                     a.top + a.height < b.top || b.top + b.height < a.top);
+          }
+
+          function overlapArea(a, b) {
+            const xOverlap = Math.max(0, Math.min(a.left + a.width, b.left + b.width) - Math.max(a.left, b.left));
+            const yOverlap = Math.max(0, Math.min(a.top + a.height, b.top + b.height) - Math.max(a.top, b.top));
+            return xOverlap * yOverlap;
+          }
+
+          // Build list of other link rects to avoid
+          const others = Array.from(allLinks).filter(l => l !== link).map(l => l.getBoundingClientRect());
+
+          let chosen = null;
+          for (const c of candidates) {
+            const candRect = { left: c.left, top: c.top, width: mRect.width, height: mRect.height };
+            let hits = false;
+            // Avoid overlapping any other link
+            for (const o of others) {
+              if (rectsIntersect(candRect, o)) { hits = true; break; }
+            }
+            // Also avoid overlapping the hovered link itself
+            if (!hits && rectsIntersect(candRect, linkRect)) {
+              hits = true;
+            }
+            if (!hits) { chosen = c; break; }
+          }
+
+          if (!chosen) {
+            // Try a spiral search around the link's center to find a placement
+            // that does not overlap any other links. This is more robust than
+            // the few fixed candidates above in crowded areas.
+            const centerX = linkRect.left + linkRect.width / 2;
+            const centerY = linkRect.top + linkRect.height / 2;
+            const maxRadius = Math.max(window.innerWidth, window.innerHeight);
+            const step = 24; // pixels per ring step
+            const angleSteps = 12; // samples per ring
+            let found = null;
+            outer: for (let r = 0; r <= maxRadius; r += step) {
+              for (let i = 0; i < angleSteps; i++) {
+                const theta = (i / angleSteps) * Math.PI * 2;
+                const cx = centerX + r * Math.cos(theta);
+                const cy = centerY + r * Math.sin(theta);
+                const left = clamp(cx - mRect.width / 2, 10, window.innerWidth - mRect.width - 10);
+                const top = clamp(cy - mRect.height / 2, 10, window.innerHeight - mRect.height - 10);
+                const candRect = { left, top, width: mRect.width, height: mRect.height };
+                let overlap = false;
+                // Avoid overlapping any other link
+                for (const o of others) {
+                  if (rectsIntersect(candRect, o)) { overlap = true; break; }
+                }
+                // Also avoid overlapping the hovered link itself
+                if (!overlap && rectsIntersect(candRect, linkRect)) {
+                  overlap = true;
+                }
+                if (!overlap) { found = { left, top }; break outer; }
+              }
+            }
+            if (found) {
+              chosen = found;
+            } else {
+              // If spiral search failed (very crowded), fall back to minimal overlap
+              let best = null;
+              let bestArea = Infinity;
+              for (const c of candidates) {
+                const candRect = { left: c.left, top: c.top, width: mRect.width, height: mRect.height };
+                let area = 0;
+                for (const o of others) area += overlapArea(candRect, o);
+                if (area < bestArea) { bestArea = area; best = c; }
+              }
+              chosen = best || candidates[0];
+            }
+          }
+
+          modal.style.left = `${Math.round(chosen.left)}px`;
+          modal.style.top = `${Math.round(chosen.top)}px`;
+
+          // Force reflow then show with transition
           void modal.offsetHeight;
           modal.classList.add("show");
 
