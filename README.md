@@ -6,8 +6,6 @@ This site showcases various projects I have worked on, along with a few, fun int
 
 → [Portfolio](https://pedroalves-dv.github.io/)
 
-![Portfolio Preview](assets/portfolio-preview.gif)
-
 ## Features
 
 ### 🎨 Interactive Canvas
