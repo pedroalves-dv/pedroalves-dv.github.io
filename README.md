@@ -28,33 +28,6 @@ This site showcases various projects I have worked on, along with a few, fun int
 - **Description**: Users can switch between light and dark modes using the toggle switch.
 - **Implementation**: The dark mode preference is stored in `localStorage` to persist across sessions.
 
-## Projects
-
-### Pixel Painter
-
-- **Description**: A pixel art drawing application.
-- **Link**: [Pixel Painter](https://pedroalves-dv.github.io/pixelpainter/)
-
-### Meridian
-
-- **Description**: A time tracker for global timezones.
-- **Link**: [Meridian](https://meridian-time.vercel.app/)
-
-### Currency Converter
-
-- **Description**: An application to convert currencies.
-- **Link**: [Currency Converter](https://pedroalves-dv.github.io/euro-converter/)
-
-### RPG Mini Game
-
-- **Description**: A small role-playing game.
-- **Link**: [RPG Mini Game](https://pedroalves-dv.github.io/dragon-repeller/)
-
-### Cash Register App
-
-- **Description**: An application to manage cash transactions.
-- **Link**: [Cash Register App](https://pedroalves-dv.github.io/cash-register/)
-
 ## Technologies Used
 
 - **HTML**: For structuring the content.
