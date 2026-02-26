@@ -1,208 +1,400 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* ========================================================================== */
+/* Imports */
 
-/* reset css */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap');
+
+
+/* ========================================================================== */
+/* Setup */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Define light mode (default) */
+/* Hide scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+
 :root {
-  --toggle-bg-color: white;
-  --toggle-text-color: #222;
-  --toggle-border-color: #222;
-  --toggle-box-shadow: 0 0 5px #222;
+  --toggle-text-color: #161616;
+  --toggle-bg-color: #ffffff;
+  --toggle-border-color: black;
+  --transition-duration: 0.4s;
 }
 
-/* Define dark mode */
+::selection {
+  background-color: none; 
+  color: rgb(255, 180, 18);
+}
+
 .dark-mode {
-  --toggle-bg-color: #222;
-  --toggle-text-color: white;
-  --toggle-border-color: white;
-  --toggle-box-shadow: 0 0 5px white;
+  --toggle-text-color: #ffffff;
+  --toggle-bg-color: #161616;
+  /* --toggle-bg-color: #191919; */
+  --transition-duration: 0.4s;
 }
 
-/* setup */
+
+
+/* ========================================================================== */
+
 body {
   background-color: var(--toggle-bg-color);
   color: var(--toggle-text-color);
-  font-family: "Roboto", sans-serif;
-  font-size: .95rem;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: crosshair;
-}
-
-/* Dark Mode Toggle Button */
-.dark-mode-toggle {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 100;
-}
-
-/* Hide the actual checkbox */
-.checkbox {
-  opacity: 0;
-  position: absolute;
-}
-
-/* Style the switch */
-.checkbox-label {
-  background-color: #222;
-  width: 38px;
-  height: 20px;
-  border-radius: 50px;
-  position: relative;
-  padding: 4px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* box-shadow: var(--toggle-bg-shadow); */
-}
-
-.checkbox-label .ball {
-  background-color: #fff;
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  left: 2px;
-  top: 2px;
-  border-radius: 50%;
-  transition: transform 0.2s linear;
-}
-
-/* Move the ball to the right when checked */
-.checkbox:checked + .checkbox-label .ball {
-  transform: translateX(18px);
-}
-
-/* Dark mode toggle button */
-.dark-mode .checkbox-label {
-  background-color: white; /* Light background for dark mode */
-}
-
-.dark-mode .checkbox-label .ball {
-  background-color: #222; /* Dark ball for contrast */
-}
-
-/* Dark mode styles */
-.dark-mode {
-  background-color: #222; /* Dark background */
-  color: white; /* White text */
-}
-
-.dark-mode a {
-  color: white; /* Make links white */
-}
-
-.dark-mode a::before {
-  background-color: rgba(255, 255, 255, 0.3); /* Adjust blur effect */
-  /* box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.3); */
+  font-size: .9rem;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Arimo", serif;
+  /* font-family: "Inter", "Radio Canada Big", sans-serif; */
+  height: auto;
+  min-height: 100vh;
+  transition: background-color var(--transition-duration),
+    color var(--transition-duration) ease-in-out;
 }
 
 
-a {
-  background-color: transparent;
-  color: var(--text-color);
-  pointer-events: auto;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  transition: transform 1s ease, letter-spacing 0.3s ease, font-style 0.3s ease;
-  z-index: 10;
-  padding: 1rem;
-  position: absolute;
+
+/* ========================================================================== */
+/* Header Menu */
+
+.header {
+  height: 50px;
+  width: 320px;
+  position: fixed;
   top: 0;
   left: 0;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 0 30px;
+  gap: 30px;
+  z-index: 9999; /* ensure header stays above all content including .projects (z-index: 999) */
+}
+
+.header-link {
+  text-decoration: none;
+  font-size: 0.9rem;
+  z-index: 99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: filter 0.15s ease-out, color 0.15s ease-out;
+  color: var(--toggle-text-color);
+  padding-right: 20px; 
 }
 
 
-a:hover {
-  text-decoration: underline;
+.layout-toggle {
+  margin-right: 30px;
 }
 
-/* canvas */
-.canvas-container {
-  width: 100%;
-  height: 100%;
+.scattered-layout {
+  overflow: hidden;
+
+
 }
 
-canvas {
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  background: none;
+/* ========================================================================== */
+/* Side Link (Linkedin) */
+
+.linkedin {
+  z-index: 99;
+  position: fixed;
+  bottom: 40vh;
+  left: 0;
+  width: auto;
+  height: auto;
+  display: flex;
+  color: var(--toggle-text-color);
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  -webkit-font-smoothing: antialiased;
+  /* border: 1px solid blue; */
 }
 
-/* Vertical layout mode */
-body.vertical-layout main {
+.linkedin div {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Aligns links to the right */
-  position: absolute;
-  right: 20%;
-  top: 160px;
+  margin: 0;
+  padding: 0;
 }
 
-body.vertical-layout a {
-  position: relative; /* Allow proper stacking */
-  display: block;
-  padding: .5rem;
-  width: fit-content;
-  transition: none;
-  overflow: hidden;
-  text-align: left;
-}
+/* ========================================================================== */
+/* Dark Mode */
 
 
-/* Preview box */
-.preview-box {
-  width: 40.1vw; /* The fixed preview box size */
-  height: 46vh;
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: hidden;
-  display: none;
-  z-index: 9999;
-  border: 1px solid black;
-}
 
-.preview-box iframe {
-  width: 1920px; /* Keep full HD resolution */
-  height: 1080px;
-  transform: scale(0.4); 
-  transform-origin: top left;
-  overflow: hidden;
-  border: none;
-}
-
-#layoutToggle {
-  background-color: var(--toggle-text-color);
-  color: var(--toggle-bg-color);
-  /* box-shadow: var(--toggle-bg-shadow); */
-  border: 1px solid var(--toggle-border-color);
-  position: absolute;
-  top: 20px;
-  left: 80px;
-  z-index: 100;
-  height: 20px;
-  width: 58px;
-  border-radius: 50px;
-  font-size: 12px;
+.dark-mode-toggle,
+.layout-toggle {
+  background-color: transparent;
   cursor: pointer;
-  font-weight: bold;
-  letter-spacing: -.1px;
- 
+  border: none;
+  padding: 0 5px;
 }
 
-.github-arrow {
-  display: none;
+.dark-mode-toggle img:hover,
+.layout-toggle img:hover,
+.header-link:hover {
+  filter: invert(60%);
+  z-index: 999;
+}
+
+.dark-mode-toggle img,
+.layout-toggle img {
+  transition: filter 0.15s ease-out;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body:not(.dark-mode) #preview-modal-link4 img,
+body:not(.dark-mode) .dragon-slayer-card img {
+  border: 1px solid rgb(219, 219, 219);
+
+}
+
+.dark-mode-toggle img{
+  width: 18px;
+  height: 18px;
+}
+
+
+/* ========================================================================== */
+/* Canvas */
+
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  /* border: 1px solid greenyellow */
+}
+
+/* ========================================================================== */
+/* Main Links (Scattered Layout) */
+
+ 
+/* allow styles to apply whether links are in <main> or moved into the overlay */
+.scattered-link,
+main a {
+  font-family: "Inter", "Radio Canada Big", sans-serif;
+  font-weight: 400;
+  font-size: 2.3rem;
+  letter-spacing: -2px;
+  color: var(--text-color);
+  width: 60px;
+  height: 50px;
+  pointer-events: auto;
+  text-decoration: none;
+  z-index: 9998;
+  position: absolute;
+  line-height: 50px;
+  text-align: center;
+  padding: 0 4px 4px 0;
+  transition: transform 600ms cubic-bezier(.2,.9,.2,1), color 200ms linear, opacity 600ms cubic-bezier(.2,.9,.2,1);
+  /* border: 1px solid green; */
+}
+
+main a:first-child {
+  letter-spacing: -1px;
+}
+
+.scattered-link:hover,
+main a:hover {
+  z-index: 9999;
+  color: rgb(110, 110, 110);
+}
+
+
+/* ========================================================================== */
+/* Straight Layout */
+
+.straight-layout-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: start;
+  gap: 10px;
+  background: none;
+  pointer-events: none;
+  padding-top: 35px;
+  /* border: 1px solid blue; */
+}
+
+
+.projects {
+  pointer-events: auto;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: end;
+  width: 100%;
+  overflow: auto;
+  z-index: 999;
+  opacity: 0;         
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.projects a {
+  text-decoration: none;
+  color: var(--toggle-text-color);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: end;
+  gap: 20px;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  height: auto;
+  width: 360px;
+  /* border: 1px solid limegreen; */
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 60px;
+  width: 500px;
+}
+
+.card-content {
+  padding-left: 10px;
+}
+
+h3 {
+  font-family: sans-serif;
+  font-weight: 400;
+  padding-left: 20px;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+  transition: transform 150ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.card:hover img {
+  transform: translateX(-42px);
+}
+
+.indent {
+  padding-bottom: 40px;
+}
+
+.indent-card {
+  padding-left: 80px;
+}
+
+.indent-link {
+  padding-top: 40px;
+}
+
+.hidden {
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ========================================================================== */
+/* Preview Modals */
+
+.preview-modal {
+  position: fixed;
+  width: 320px;
+  top: 0;
+  z-index: 99;
+  cursor: pointer;
+  /* Start hidden by default and animate into view when .show is added */
+  opacity: 0;
+  transform: translateX(10px) translateY(0) scale(0.99);
+  pointer-events: none;
+  transition: opacity 360ms cubic-bezier(.2,.9,.2,1),
+              transform 360ms cubic-bezier(.2,.9,.2,1);
+  will-change: opacity, transform;
+ font-size: .9rem;
+}
+
+.preview-modal.show {
+  opacity: 1;
+  transform: translateX(0) translateY(0) scale(1);
+  pointer-events: auto; /* clickable only when visible */
+}
+
+.preview-modal.hidden {
+  /* More-specific hidden state for preview modals so generic .hidden remains usable */
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.preview-title {
+  font-size: .9rem;
+  padding-bottom: 5px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.preview-img {
+  margin-bottom: 5px;
+  display: block;
+  transition: transform 130ms cubic-bezier(0.2, 0, 0.2, 1);
+  /* width: 100%;
+  height: auto;
+  max-width: 100%; */
+  border-radius: 2px;
+}
+
+
+/* ========================================================================== */
+/* Mobile Layout */
+
+@media (max-width: 1440px) {
+  .scattered-layout {
+    display: none !important;
+  }
+  .straight-layout-container {
+    display: flex !important;
+  }
+  .layout-toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .linkedin {
+    display: none;
+  }
+
+  .header {
+    width: 100%;
+    justify-content: space-between;
+    background-color: var(--toggle-bg-color);
+    z-index: 9999;
+  }
+
+  html {
+    font-size: 15px;
+  }
 }
