@@ -97,8 +97,8 @@ function moveLinksToOverlay() {
 
 // ── Scattered Layout ─────────────────────────────────────────────────────────
 function generateGridPositions() {
-  const gridCellWidth = 200;
-  const gridCellHeight = 70;
+  const gridCellWidth = 260;
+  const gridCellHeight = 110;
   const paddingTop = 30;
   const paddingRight = 100;
   const paddingBottom = 200;
