@@ -1,154 +1,118 @@
-//---------------------------------------------------------------------------------------
-// Canvas Drawing Functionality
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
+// app.js
 
-  function setCanvasSize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
-  }
+// ── Canvas Drawing ──────────────────────────────────────────────────────────
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-  setCanvasSize();
-  window.addEventListener("resize", setCanvasSize);
+const PANEL_W = 280;
 
-  let isDrawing = false;
-  const colors = ["red", "#fc3b00", "#c1fc00", "#5000fc", "green", "#ff7393", "lightgray"];
+function setCanvasSize() {
+  const newW = window.innerWidth - PANEL_W;
+  const newH = window.innerHeight;
+  if (canvas.width === newW && canvas.height === newH) return;
 
-  canvas.addEventListener("mousedown", () => {
-    isDrawing = true;
-    ctx.beginPath();
-    ctx.lineWidth = 50;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = colors[Math.floor(Math.random() * colors.length)];
-    ctx.shadowBlur = 30;
-    ctx.shadowColor = ctx.strokeStyle;
-  });
+  const off = document.createElement("canvas");
+  off.width = canvas.width;
+  off.height = canvas.height;
+  off.getContext("2d").drawImage(canvas, 0, 0);
 
-  canvas.addEventListener("mousemove", (event) => {
-    if (!isDrawing) return;
-    ctx.lineTo(event.clientX, event.clientY);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(event.clientX, event.clientY);
-  });
+  canvas.width = newW;
+  canvas.height = newH;
+  ctx.drawImage(off, 0, 0);
+}
 
-  canvas.addEventListener("mouseup", () => (isDrawing = false));
-  canvas.addEventListener("mouseleave", () => (isDrawing = false));
+setCanvasSize();
+window.addEventListener("resize", setCanvasSize);
 
-//---------------------------------------------------------------------------------------
-// Dark Mode Functionality
-  const layoutToggle = document.querySelector(".layout-toggle");
-  const darkModeToggle = document.querySelector(".dark-mode-toggle");
-  const body = document.body;
-  const html = document.documentElement;
-  let isDarkMode = localStorage.getItem("dark-mode") === "enabled";
+let isDrawing = false;
+const colors = [
+  "red",
+  "#fc3b00",
+  "#c1fc00",
+  "#5000fc",
+  "green",
+  "#ff7393",
+  "lightgray",
+];
 
-  function updateDarkMode() {
-    // body.classList.toggle("dark-mode", isDarkMode);
-    html.classList.toggle("dark-mode", isDarkMode);
-    const filterValue = isDarkMode ? "invert(0)" : "invert(1)";
-    layoutToggle.style.filter = filterValue;
-    darkModeToggle.style.filter = filterValue;
-    const darkModeIcon = darkModeToggle.querySelector("img");
-  if (darkModeIcon) {
-    darkModeIcon.src = isDarkMode
-      ? "assets/images/light-mode-icon.png"
-      : "assets/images/light-mode-icon.png";
-    darkModeIcon.alt = isDarkMode ? "Disable Dark Mode" : "Enable Dark Mode";
-  }
-    localStorage.setItem("dark-mode", isDarkMode ? "enabled" : "disabled");
-  }
+canvas.addEventListener("mousedown", (event) => {
+  isDrawing = true;
+  ctx.beginPath();
+  ctx.lineWidth = 50;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = colors[Math.floor(Math.random() * colors.length)];
+  ctx.shadowBlur = 30;
+  ctx.shadowColor = ctx.strokeStyle;
+  ctx.moveTo(event.offsetX, event.offsetY);
+});
 
-  updateDarkMode();
+canvas.addEventListener("mousemove", (event) => {
+  if (!isDrawing) return;
+  ctx.lineTo(event.offsetX, event.offsetY);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(event.offsetX, event.offsetY);
+});
 
-  darkModeToggle.addEventListener("click", () => {
-      // Temporarily disable transitions site-wide to avoid intermediate colors
-      document.documentElement.classList.add('no-transition');
-      const headerEl = document.querySelector('.header');
-      if (headerEl) headerEl.classList.add('no-transition');
+canvas.addEventListener("mouseup", () => (isDrawing = false));
+canvas.addEventListener("mouseleave", () => (isDrawing = false));
 
-      isDarkMode = !isDarkMode;
-      updateDarkMode();
+// ── Dark Mode — apply from localStorage ──────────────────────────────────────
+const html = document.documentElement;
+const isDarkMode = localStorage.getItem("dark-mode") === "enabled";
+html.classList.toggle("dark-mode", isDarkMode);
 
-      // Force a repaint and remove the helper so other transitions remain smooth
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          document.documentElement.classList.remove('no-transition');
-          if (headerEl) headerEl.classList.remove('no-transition');
-        }, 60);
-      });
-  });
+// ── Layout State ─────────────────────────────────────────────────────────────
+let allLinks = document.querySelectorAll("a.scattered-link");
+const main = document.querySelector("main");
+const straightLayoutContainer = document.querySelector(".straight-layout-container");
+const projects = document.querySelector(".projects");
+const info = document.querySelector(".info");
+let isStraightLayout = false;
+let currentMode = "scatter"; // "scatter" | "list" — the layout mode, never "draw"
+let isDrawActive = false;    // draw overlay is independent of layout mode
+let assignedPositions = new Map();
+let currentPreviewModal = null;
 
-//---------------------------------------------------------------------------------------
-// Layouts
-  // Select scattered links by class so selection remains valid even if we reparent them
-  let allLinks = document.querySelectorAll("a.scattered-link");
-  const main = document.querySelector("main");
-  const straightLayoutContainer = document.querySelector(".straight-layout-container");
-  const projects = document.querySelector(".projects");
-  const info = document.querySelector(".info");
-  let isStraightLayout = false;
-  let assignedPositions = new Map();
-
-// Create an overlay container appended at the end of <body> so links paint above the canvas
-let overlayLinks = document.querySelector('.overlay-links');
+// Overlay container so scattered links paint above the canvas
+let overlayLinks = document.querySelector(".overlay-links");
 if (!overlayLinks) {
-  overlayLinks = document.createElement('div');
-  overlayLinks.className = 'overlay-links';
-  // keep it non-blocking by default; links inside will re-enable pointer-events
-  overlayLinks.style.position = 'fixed';
-  overlayLinks.style.inset = '0';
-  overlayLinks.style.pointerEvents = 'none';
-  overlayLinks.style.zIndex = '9999';
+  overlayLinks = document.createElement("div");
+  overlayLinks.className = "overlay-links";
+  overlayLinks.style.position = "fixed";
+  overlayLinks.style.inset = "0";
+  overlayLinks.style.pointerEvents = "none";
+  overlayLinks.style.zIndex = "9999";
   document.body.appendChild(overlayLinks);
 }
 
 function moveLinksToOverlay() {
-  const links = Array.from(document.querySelectorAll('a.scattered-link'));
-  links.forEach(link => {
+  const links = Array.from(document.querySelectorAll("a.scattered-link"));
+  links.forEach((link) => {
     overlayLinks.appendChild(link);
-    // enable interaction on the link itself
-    link.style.pointerEvents = 'auto';
+    link.style.pointerEvents = "auto";
   });
-  // refresh NodeList
-  allLinks = document.querySelectorAll('a.scattered-link');
+  allLinks = document.querySelectorAll("a.scattered-link");
 }
 
-function moveLinksToMain() {
-  const links = Array.from(overlayLinks.querySelectorAll('a.scattered-link'));
-  links.forEach(link => {
-    main.appendChild(link);
-    link.style.pointerEvents = '';
-  });
-  allLinks = document.querySelectorAll('a.scattered-link');
-}
-
-//---------------------------------------------------------------------------------------
-// Scattered Layout
+// ── Scattered Layout ─────────────────────────────────────────────────────────
 function generateGridPositions() {
   const gridCellWidth = 200;
   const gridCellHeight = 70;
-
-  // Customize these to control grid position
-  const paddingTop = 100;
+  const paddingTop = 30;
   const paddingRight = 100;
   const paddingBottom = 200;
-  const paddingLeft = 350;
-  // Optionally cap the maximum number of columns (makes the grid narrower)
-  const maxColumns = 5; // change this number to reduce/increase columns
+  const paddingLeft = 310;    // 280px panel + 30px margin
+  const maxColumns = 5;
 
   const usableWidth = window.innerWidth - paddingLeft - paddingRight;
   const usableHeight = window.innerHeight - paddingTop - paddingBottom;
   const columns = Math.min(Math.floor(usableWidth / gridCellWidth), maxColumns);
   const rows = Math.floor(usableHeight / gridCellHeight);
 
-  // Calculate the actual grid size
   const gridWidth = columns * gridCellWidth;
   const gridHeight = rows * gridCellHeight;
 
-  // Center the grid within the padded area
   const startX = paddingLeft + (usableWidth - gridWidth) / 2;
   const startY = paddingTop + (usableHeight - gridHeight) / 2;
 
@@ -164,111 +128,97 @@ function generateGridPositions() {
   return positions;
 }
 
-  function assignGridPositions() {
-    let availablePositions = [...generateGridPositions()];
-    allLinks.forEach((link) => {
-      if (availablePositions.length === 0) return;
-      const randomIndex = Math.floor(Math.random() * availablePositions.length);
-      const position = availablePositions.splice(randomIndex, 1)[0];
-      assignedPositions.set(link, position);
-      link.style.transform = `translate(${position.x}px, ${position.y}px)`;
-      link.style.opacity = "1";
-    });
+function assignGridPositions() {
+  let availablePositions = [...generateGridPositions()];
+  allLinks.forEach((link) => {
+    if (availablePositions.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * availablePositions.length);
+    const position = availablePositions.splice(randomIndex, 1)[0];
+    assignedPositions.set(link, position);
+    link.style.transform = `translate(${position.x}px, ${position.y}px)`;
+    link.style.opacity = "1";
+  });
+}
+
+function shufflePositions(excludeLink) {
+  if (isStraightLayout) return;
+
+  let availablePositions = [...assignedPositions.values()];
+  const hoveredPosition = assignedPositions.get(excludeLink);
+
+  if (hoveredPosition) {
+    availablePositions = availablePositions.filter((pos) => pos !== hoveredPosition);
   }
 
-  function shufflePositions(excludeLink) {
-    if (isStraightLayout) return; // Prevent movement in straight mode
+  const shuffledPositions = availablePositions.sort(() => Math.random() - 0.5);
+  let index = 0;
 
-    let availablePositions = [...assignedPositions.values()];
-    let hoveredPosition = assignedPositions.get(excludeLink);
+  allLinks.forEach((link) => {
+    if (link === excludeLink) return;
+    const newPos = shuffledPositions[index++];
+    assignedPositions.set(link, newPos);
+    link.style.transform = `translate(${newPos.x}px, ${newPos.y}px)`;
+  });
+}
 
-    if (hoveredPosition) {
-      availablePositions = availablePositions.filter(
-        (pos) => pos !== hoveredPosition
-      );
-    }
-
-    let shuffledPositions = availablePositions.sort(() => Math.random() - 0.5);
-    let index = 0;
-
-    allLinks.forEach((link) => {
-      if (link === excludeLink) return;
-      const newPos = shuffledPositions[index++];
-      assignedPositions.set(link, newPos);
-      link.style.transform = `translate(${newPos.x}px, ${newPos.y}px)`;
-    });
-  }
-
-
-
-//---------------------------------------------------------------------------------------
-// Dynamic Preview Modal Functionality
-let currentPreviewModal = null;
-
+// ── Preview Modals ────────────────────────────────────────────────────────────
 allLinks.forEach((link, idx) => {
   link.setAttribute("data-preview-id", `preview-modal-link${idx + 1}`);
   link.addEventListener("mouseenter", () => {
     if (!isStraightLayout) {
       const previewId = link.getAttribute("data-preview-id");
-      // If the current modal is already showing, do nothing
-      if (currentPreviewModal && currentPreviewModal.id === previewId && !currentPreviewModal.classList.contains("hidden")) {
+      if (
+        currentPreviewModal &&
+        currentPreviewModal.id === previewId &&
+        !currentPreviewModal.classList.contains("hidden")
+      ) {
         return;
       }
-      // Hide previous modal
       if (currentPreviewModal) {
-        // hide previous modal with transition
         currentPreviewModal.classList.remove("show");
         currentPreviewModal.classList.add("hidden");
       }
-      // Show new modal
       if (previewId) {
         const modal = document.getElementById(previewId);
         if (modal) {
-          // Position the modal near the hovered link while avoiding covering
-          // other nearby links. We'll measure the modal, compute a few
-          // candidate positions (right, left, above, below the link), and
-          // pick the first that doesn't intersect other links. If all
-          // intersect, pick the one with minimal overlap area.
-
-          // Reveal the modal off-screen so we can measure it without flashing
           modal.classList.remove("hidden");
-          modal.style.left = '-9999px';
-          modal.style.top = '-9999px';
-          modal.style.right = '';
-          // force layout so modal has a proper size
+          modal.style.left = "-9999px";
+          modal.style.top = "-9999px";
+          modal.style.right = "";
           void modal.offsetHeight;
           const mRect = modal.getBoundingClientRect();
           const linkRect = link.getBoundingClientRect();
           const margin = 12;
 
-          // helper to clamp to viewport
-          function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+          function clamp(v, min, max) {
+            return Math.max(min, Math.min(max, v));
+          }
 
           const candidates = [];
-          // Right of link (vertically centered)
           candidates.push({
-            left: clamp(linkRect.right + margin, 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10)
+            left: clamp(linkRect.right + margin, PANEL_W + 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10),
           });
-          // Left of link
           candidates.push({
-            left: clamp(linkRect.left - mRect.width - margin, 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10)
+            left: clamp(linkRect.left - mRect.width - margin, PANEL_W + 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10),
           });
-          // Above link (horizontally centered)
           candidates.push({
-            left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.top - mRect.height - margin, 10, window.innerHeight - mRect.height - 10)
+            left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, PANEL_W + 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.top - mRect.height - margin, 10, window.innerHeight - mRect.height - 10),
           });
-          // Below link
           candidates.push({
-            left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.bottom + margin, 10, window.innerHeight - mRect.height - 10)
+            left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, PANEL_W + 10, window.innerWidth - mRect.width - 10),
+            top: clamp(linkRect.bottom + margin, 10, window.innerHeight - mRect.height - 10),
           });
 
           function rectsIntersect(a, b) {
-            return !(a.left + a.width < b.left || b.left + b.width < a.left ||
-                     a.top + a.height < b.top || b.top + b.height < a.top);
+            return !(
+              a.left + a.width < b.left ||
+              b.left + b.width < a.left ||
+              a.top + a.height < b.top ||
+              b.top + b.height < a.top
+            );
           }
 
           function overlapArea(a, b) {
@@ -277,58 +227,47 @@ allLinks.forEach((link, idx) => {
             return xOverlap * yOverlap;
           }
 
-          // Build list of other link rects to avoid
-          const others = Array.from(allLinks).filter(l => l !== link).map(l => l.getBoundingClientRect());
+          const others = Array.from(allLinks)
+            .filter((l) => l !== link)
+            .map((l) => l.getBoundingClientRect());
 
           let chosen = null;
           for (const c of candidates) {
             const candRect = { left: c.left, top: c.top, width: mRect.width, height: mRect.height };
             let hits = false;
-            // Avoid overlapping any other link
             for (const o of others) {
               if (rectsIntersect(candRect, o)) { hits = true; break; }
             }
-            // Also avoid overlapping the hovered link itself
-            if (!hits && rectsIntersect(candRect, linkRect)) {
-              hits = true;
-            }
+            if (!hits && rectsIntersect(candRect, linkRect)) hits = true;
             if (!hits) { chosen = c; break; }
           }
 
           if (!chosen) {
-            // Try a spiral search around the link's center to find a placement
-            // that does not overlap any other links. This is more robust than
-            // the few fixed candidates above in crowded areas.
             const centerX = linkRect.left + linkRect.width / 2;
             const centerY = linkRect.top + linkRect.height / 2;
             const maxRadius = Math.max(window.innerWidth, window.innerHeight);
-            const step = 24; // pixels per ring step
-            const angleSteps = 12; // samples per ring
+            const step = 24;
+            const angleSteps = 12;
             let found = null;
             outer: for (let r = 0; r <= maxRadius; r += step) {
               for (let i = 0; i < angleSteps; i++) {
                 const theta = (i / angleSteps) * Math.PI * 2;
                 const cx = centerX + r * Math.cos(theta);
                 const cy = centerY + r * Math.sin(theta);
-                const left = clamp(cx - mRect.width / 2, 10, window.innerWidth - mRect.width - 10);
+                const left = clamp(cx - mRect.width / 2, PANEL_W + 10, window.innerWidth - mRect.width - 10);
                 const top = clamp(cy - mRect.height / 2, 10, window.innerHeight - mRect.height - 10);
                 const candRect = { left, top, width: mRect.width, height: mRect.height };
                 let overlap = false;
-                // Avoid overlapping any other link
                 for (const o of others) {
                   if (rectsIntersect(candRect, o)) { overlap = true; break; }
                 }
-                // Also avoid overlapping the hovered link itself
-                if (!overlap && rectsIntersect(candRect, linkRect)) {
-                  overlap = true;
-                }
+                if (!overlap && rectsIntersect(candRect, linkRect)) overlap = true;
                 if (!overlap) { found = { left, top }; break outer; }
               }
             }
             if (found) {
               chosen = found;
             } else {
-              // If spiral search failed (very crowded), fall back to minimal overlap
               let best = null;
               let bestArea = Infinity;
               for (const c of candidates) {
@@ -344,14 +283,12 @@ allLinks.forEach((link, idx) => {
           modal.style.left = `${Math.round(chosen.left)}px`;
           modal.style.top = `${Math.round(chosen.top)}px`;
 
-          // Force reflow then show with transition
           void modal.offsetHeight;
           modal.classList.add("show");
 
-          // Make modal clickable: open the link in a new tab
           modal.onclick = (e) => {
             e.stopPropagation();
-            window.open(link.href, "_blank");
+            window.open(link.href, "_blank", "noopener,noreferrer");
           };
           currentPreviewModal = modal;
         }
@@ -360,27 +297,19 @@ allLinks.forEach((link, idx) => {
   });
 });
 
-//---------------------------------------------------------------------------------------
-// Straight Layout
+// ── Straight Layout ───────────────────────────────────────────────────────────
 function populateStraightLayout() {
   projects.innerHTML = "";
 
-
-
   allLinks.forEach((link) => {
-    // Get the alt text from the data-alt
-    const altText = link.getAttribute("data-alt")
-
+    const altText = link.getAttribute("data-alt");
     const card = document.createElement("div");
     card.classList.add("card");
-    // Creates a slug from the alt text for the card class
-    const slug = altText.toLowerCase().replace(/\s+/g, '-');
+    const slug = altText.toLowerCase().replace(/\s+/g, "-");
     card.classList.add(`${slug}-card`);
 
-  
-
     card.innerHTML = `
-      <a href="${link.href}" target="_blank">
+      <a href="${link.href}" target="_blank" rel="noopener noreferrer">
         <img src="${link.getAttribute("data-screenshot")}" alt="${altText}">
         <div class="card-content">
           <h3 class="indent-card">${altText.toUpperCase()}</h3>
@@ -388,11 +317,19 @@ function populateStraightLayout() {
         </div>
       </a>`;
 
+    const img = card.querySelector("img");
+    card.addEventListener("mouseenter", (e) => {
+      const rect = card.getBoundingClientRect();
+      const fromLeft = e.clientX < rect.left + rect.width / 2;
+      img.style.transform = `translateX(${fromLeft ? -42 : 42}px)`;
+    });
+    card.addEventListener("mouseleave", () => {
+      img.style.transform = "";
+    });
+
     projects.appendChild(card);
     link.style.display = "none";
-    requestAnimationFrame(() => {
-      card.classList.add("fade-in");
-    });
+    requestAnimationFrame(() => { card.classList.add("fade-in"); });
   });
 
   requestAnimationFrame(() => {
@@ -404,185 +341,358 @@ function populateStraightLayout() {
   straightLayoutContainer.appendChild(info);
 }
 
-layoutToggle.addEventListener("click", () => {
-  isStraightLayout = !isStraightLayout;
-
+// ── Draw Overlay ──────────────────────────────────────────────────────────────
+function enterDraw() {
+  isDrawActive = true;
+  document.body.classList.add("draw-mode");
+  setCanvasSize();
+  hideCanvasViewer();
   if (currentPreviewModal) {
     currentPreviewModal.classList.remove("show");
-  currentPreviewModal.classList.remove("show");
-  currentPreviewModal.classList.add("hidden");
-    currentPreviewModal = null;
-  }
-
-  if (isStraightLayout) {
-    straightLayoutContainer.classList.remove("hidden");
-    straightLayoutContainer.classList.add("fade-in");
-    main.classList.add("hidden");
-    layoutToggle.innerHTML = `<img src="assets/images/straight.png" alt="Straight Layout">`;
-
-    document.body.style.overflow = "auto";
-    populateStraightLayout();
-
-  } else {
-    projects.classList.remove("fade-in");
-    info.classList.remove("fade-in");
-    straightLayoutContainer.classList.add("hidden");
-    main.classList.remove("hidden");
-    main.classList.add("fade-in");
-    layoutToggle.innerHTML = `<img src="assets/images/scattered.png" alt="Scattered Layout">`;
-
-    // Ensure links are rendered in the overlay (so they appear above the canvas)
-    moveLinksToOverlay();
-
-    // Prepare links to re-appear smoothly and be interactive
-    allLinks.forEach((link) => {
-      link.style.display = "block";
-      link.style.opacity = "0";
-      link.style.pointerEvents = 'auto';
-    });
-
-    assignGridPositions();
-
-    // Force reflow then fade in
-    void main.offsetHeight;
-    requestAnimationFrame(() => {
-      allLinks.forEach((link) => link.style.opacity = '1');
-    });
-
-    // Disable scroll for scattered layout
-    document.body.style.overflow = "hidden";
-
-    // --- FIX: Reset scroll position and prevent scroll ---
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    projects.scrollTop = 0;
-  }
-});
-
-//---------------------------------------------------------------------------------------
-// Show Grid Cells for Debugging
-
-function showGridCells() {
-  // Remove any previous grid overlays
-  document.querySelectorAll('.grid-debug-cell').forEach(el => el.remove());
-
-  const gridCells = generateGridPositions();
-  gridCells.forEach(cell => {
-    const div = document.createElement('div');
-    div.className = 'grid-debug-cell';
-    div.style.position = 'absolute';
-    div.style.left = `${cell.x}px`;
-    div.style.top = `${cell.y}px`;
-    div.style.width = '200px';   // match gridCellWidth
-    div.style.height = '70px';   // match gridCellHeight
-    div.style.border = '1px dashed #ff00ff';
-    div.style.pointerEvents = 'none'; // so it doesn't block links
-    div.style.zIndex = 1; // behind your links
-    document.body.appendChild(div);
-  });
-}
-
-  assignGridPositions();
-  
-  // Makes the links appear instead of slide in on First visit/Page reload 
-  // Force a reflow so the browser applies the transform instantly
-  void main.offsetHeight;
-
-  // Enable the transition for future shuffles
-  allLinks.forEach(link => {
-  // Match preview modal easing/duration for movement; keep color snappy (200ms)
-  link.style.transition = "transform 600ms cubic-bezier(.2,.9,.2,1), color 200ms linear, opacity 600ms cubic-bezier(.2,.9,.2,1)";
-});
-
-//---------------------------------------------------------------------------------------
-// Show Grid Cells for Debugging (uncomment to use)
-  // showGridCells()
-
-
-//---------------------------------------------------------------------------------------
-// Puts a cooldown on shuffling links
-// This prevents the links from being shuffled too frequently
-
-let canShuffle = true;
-
-allLinks.forEach((link) => {
-  link.addEventListener("mouseover", () => {
-    if (!canShuffle) return;
-
-    canShuffle = false;
-    shufflePositions(link);
-
-    setTimeout(() => {
-      canShuffle = true;
-    }, 5000);
-  });
-});
-
-
-//---------------------------------------------------------------------------------------
-// Change link colors on hover (saturated colors)
-
-
-// const saturatedColors = [
-//   "#ff0000", // red
-//   "#ff8000", // orange
-//   "#ffff00", // yellow
-//   "#80ff00", // lime
-//   "#00ff00", // green
-//   "#00ff80", // spring green
-//   "#00ffff", // cyan
-//   "#0080ff", // azure
-//   "#0000ff", // blue
-//   "#8000ff", // violet
-//   "#ff00ff", // magenta
-// ];
-
-
-// allLinks.forEach(link => {
-//   link.addEventListener("mouseenter", () => {
-//     const randomColor = saturatedColors[Math.floor(Math.random() * saturatedColors.length)];
-//     link.style.color = randomColor;
-//   });
-//   link.addEventListener("mouseleave", () => {
-//     link.style.color = ""; // Reset on mouse out
-//   });
-// });
-
-//---------------------------------------------------------------------------------------
-// Mobile Layout
-
-  function isMobile() {
-  return window.innerWidth <= 1440; // or your preferred breakpoint
-}
-
-function setMobileLayout() {
-   if (currentPreviewModal) {
     currentPreviewModal.classList.add("hidden");
     currentPreviewModal = null;
   }
-  if (isMobile()) {
-    // Always show straight layout, hide toggle
-    straightLayoutContainer.classList.remove("hidden");
-    main.classList.add("hidden");
-    
-    layoutToggle.style.display = "none";
+  syncDrawButton();
+}
+
+function exitDraw() {
+  isDrawActive = false;
+  document.body.classList.remove("draw-mode");
+  setCanvasSize();
+  syncDrawButton();
+}
+
+function toggleDraw() {
+  if (isDrawActive) exitDraw();
+  else enterDraw();
+}
+
+// ── Mode Switching (layout only — never "draw") ────────────────────────────────
+function setMode(mode) {
+  if (isDrawActive) exitDraw();
+  currentMode = mode;
+
+  syncModeButtons(mode);
+
+  if (currentPreviewModal) {
+    currentPreviewModal.classList.remove("show");
+    currentPreviewModal.classList.add("hidden");
+    currentPreviewModal = null;
+  }
+
+  hideCanvasViewer();
+
+  if (mode === "list") {
     isStraightLayout = true;
-    populateStraightLayout(); // <-- Populate the straight layout!
-     info.style.display = "none"; // Hide info in mobile layout
+    straightLayoutContainer.classList.remove("hidden");
+    straightLayoutContainer.classList.add("fade-in");
+    main.classList.add("hidden");
+    // ensure scattered links are hidden and non-interactive
+    overlayLinks.style.opacity = "0";
+    overlayLinks.style.pointerEvents = "none";
+    overlayLinks.style.zIndex = "0";
+    document.body.style.overflow = "auto";
+    populateStraightLayout();
   } else {
-    // Restore normal toggle behavior
-    layoutToggle.style.display = "";
-     info.style.display = ""; // Show info in desktop layout
-    if (!isStraightLayout) {
+    if (isStraightLayout) {
+      isStraightLayout = false;
+      projects.classList.remove("fade-in");
+      info.classList.remove("fade-in");
       straightLayoutContainer.classList.add("hidden");
       main.classList.remove("hidden");
-      // Show links again
+      main.classList.add("fade-in");
+
+      moveLinksToOverlay();
       allLinks.forEach((link) => {
         link.style.display = "block";
+        link.style.opacity = "0";
+        link.style.pointerEvents = "auto";
       });
+      assignGridPositions();
+
+      // restore overlay links visibility
+      overlayLinks.style.opacity = "";
+      overlayLinks.style.pointerEvents = "";
+      overlayLinks.style.zIndex = "9999";
+
+      void main.offsetHeight;
+      requestAnimationFrame(() => {
+        allLinks.forEach((link) => (link.style.opacity = "1"));
+      });
+
+      document.body.style.overflow = "hidden";
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      projects.scrollTop = 0;
+    } else {
+      // switching within scatter — ensure overlay is in correct state
+      overlayLinks.style.opacity = "";
+      overlayLinks.style.pointerEvents = "";
+      overlayLinks.style.zIndex = "9999";
     }
   }
 }
 
-window.addEventListener("resize", setMobileLayout);
+// ── Mode button roving tabindex ───────────────────────────────────────────────
+const modeBtns = Array.from(document.querySelectorAll(".mode-btn"));
+
+function syncModeButtons(activeMode) {
+  modeBtns.forEach((btn) => {
+    if (btn.dataset.mode === "draw") return; // draw has its own sync
+    const isActive = btn.dataset.mode === activeMode;
+    btn.classList.toggle("active", isActive);
+    btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+    btn.tabIndex = isActive ? 0 : -1;
+  });
+}
+
+function syncDrawButton() {
+  const drawBtn = document.querySelector('.mode-btn[data-mode="draw"]');
+  if (!drawBtn) return;
+  drawBtn.classList.toggle("draw-active", isDrawActive);
+  drawBtn.setAttribute("aria-pressed", isDrawActive ? "true" : "false");
+}
+
+modeBtns.forEach((btn) => {
+  if (btn.dataset.mode === "draw") {
+    btn.addEventListener("click", toggleDraw);
+  } else {
+    btn.addEventListener("click", () => setMode(btn.dataset.mode));
+  }
+  btn.addEventListener("keydown", (e) => {
+    const idx = modeBtns.indexOf(document.activeElement);
+    if (idx === -1) return;
+    let next = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      next = modeBtns[(idx + 1) % modeBtns.length];
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      next = modeBtns[(idx - 1 + modeBtns.length) % modeBtns.length];
+    }
+    if (next) { next.focus(); next.click(); }
+  });
+});
+
+// Exit draw when clicking the left panel
+document.querySelector(".left-panel").addEventListener("mousedown", () => {
+  if (isDrawActive) exitDraw();
+});
+
+// Logo → reset to scattered home
+document.querySelector(".logo-name").addEventListener("click", () => {
+  setMode("scatter");
+});
+
+// Clear canvas button
+document.getElementById("clearCanvasBtn").addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+// ── Initial position assignment ───────────────────────────────────────────────
+assignGridPositions();
+void main.offsetHeight;
+
+allLinks.forEach((link) => {
+  link.style.transition =
+    "transform 600ms cubic-bezier(.2,.9,.2,1), color 200ms linear, opacity 600ms cubic-bezier(.2,.9,.2,1)";
+});
+
+// ── Shuffle cooldown ──────────────────────────────────────────────────────────
+let canShuffle = true;
+
+allLinks.forEach((link) => {
+  link.addEventListener("mouseover", () => {
+    if (!canShuffle || isStraightLayout) return;
+    canShuffle = false;
+    shufflePositions(link);
+    setTimeout(() => { canShuffle = true; }, 5000);
+  });
+});
+
+// ── Canvas Viewer (markdown) ──────────────────────────────────────────────────
+const canvasViewer = document.getElementById("canvasViewer");
+const canvasViewerContent = document.getElementById("canvasViewerContent");
+const canvasViewerClose = document.getElementById("canvasViewerClose");
+
+function showCanvasViewer(html) {
+  canvasViewerContent.innerHTML = html;
+  canvasViewerContent.querySelectorAll("a").forEach((a) => {
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+  });
+  canvasViewer.classList.add("open");
+  if (currentPreviewModal) {
+    currentPreviewModal.classList.remove("show");
+    currentPreviewModal.classList.add("hidden");
+    currentPreviewModal = null;
+  }
+}
+
+function hideCanvasViewer() {
+  if (!canvasViewer.classList.contains("open")) return;
+  canvasViewer.classList.remove("open");
+  document.querySelectorAll(".tree-row.tree-active").forEach((r) => r.classList.remove("tree-active"));
+}
+
+canvasViewerClose.addEventListener("click", hideCanvasViewer);
+
+// ── File Tree ─────────────────────────────────────────────────────────────────
+
+// Populate projects/ from scattered link data
+function buildProjectTree() {
+  const container = document.getElementById("tree-projects");
+  if (!container) return;
+  container.innerHTML = "";
+  document.querySelectorAll("a.scattered-link").forEach((link) => {
+    const name = (link.getAttribute("data-alt") || "project")
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+    const href = link.href;
+    const row = document.createElement("div");
+    row.className = "tree-row tree-file";
+    row.dataset.action = "url";
+    row.dataset.href = href;
+    row.innerHTML = `<span class="tree-label">${name}</span>`;
+    container.appendChild(row);
+  });
+}
+
+buildProjectTree();
+
+// Folder toggle
+document.querySelectorAll(".tree-folder").forEach((folder) => {
+  folder.addEventListener("click", () => {
+    const folderId = folder.dataset.folder;
+    const isOpen = folder.dataset.open === "true";
+    folder.dataset.open = isOpen ? "false" : "true";
+    const children = document.getElementById(`tree-${folderId}`);
+    if (children) children.classList.toggle("open", !isOpen);
+  });
+});
+
+// File/root clicks (delegated)
+document.addEventListener("click", (e) => {
+  const row = e.target.closest(".tree-row");
+  if (!row) return;
+  const action = row.dataset.action;
+  if (action === "scatter") {
+    setMode("scatter");
+    hideCanvasViewer();
+  } else if (action === "md") {
+    const mdPath = row.dataset.md;
+    if (!mdPath) return;
+    document.querySelectorAll(".tree-row.tree-active").forEach((r) => r.classList.remove("tree-active"));
+    row.classList.add("tree-active");
+    fetch(mdPath)
+      .then((r) => r.text())
+      .then((text) => {
+        const html = typeof marked !== "undefined"
+          ? marked.parse(text)
+          : `<pre>${text}</pre>`;
+        showCanvasViewer(html);
+      })
+      .catch(() => showCanvasViewer("<p>Could not load file.</p>"));
+  } else if (action === "url") {
+    const href = row.dataset.href;
+    if (href) window.open(href, "_blank", "noopener,noreferrer");
+  }
+});
+
+// ── Escape key ────────────────────────────────────────────────────────────────
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (isDrawActive) {
+    exitDraw();
+  } else if (canvasViewer.classList.contains("open")) {
+    hideCanvasViewer();
+  }
+});
+
+// ── Mobile Layout ─────────────────────────────────────────────────────────────
+function isMobile() {
+  return window.innerWidth <= 1200;
+}
+
+function setMobileLayout() {
+  if (currentPreviewModal) {
+    currentPreviewModal.classList.add("hidden");
+    currentPreviewModal = null;
+  }
+  if (isMobile()) {
+    straightLayoutContainer.classList.remove("hidden");
+    main.classList.add("hidden");
+    isStraightLayout = true;
+    populateStraightLayout();
+    info.style.display = "none";
+  } else {
+    info.style.display = "";
+    if (!isStraightLayout) {
+      straightLayoutContainer.classList.add("hidden");
+      main.classList.remove("hidden");
+      allLinks.forEach((link) => { link.style.display = "block"; });
+    }
+  }
+}
+
+// Force straight layout when resizing below 1200px while in scatter mode
+window.addEventListener("resize", () => {
+  if (isMobile() && currentMode === "scatter") {
+    isStraightLayout = true;
+    straightLayoutContainer.classList.remove("hidden");
+    straightLayoutContainer.classList.add("fade-in");
+    main.classList.add("hidden");
+    overlayLinks.style.opacity = "0";
+    overlayLinks.style.pointerEvents = "none";
+    overlayLinks.style.zIndex = "0";
+    document.body.style.overflow = "auto";
+    populateStraightLayout();
+    info.style.display = "none";
+  }
+});
+
 window.addEventListener("DOMContentLoaded", setMobileLayout);
+
+// ── Mobile About Overlay ──────────────────────────────────────────────────────
+const mobileAboutBtn = document.getElementById("mobileAboutBtn");
+const mobileAboutOverlay = document.getElementById("mobileAboutOverlay");
+const mobileAboutContent = document.getElementById("mobileAboutContent");
+let mobileAboutLoaded = false;
+let mobileAboutOpen = false;
+
+function openMobileAbout() {
+  if (!mobileAboutLoaded) {
+    fetch("/docs/about.md")
+      .then((r) => r.text())
+      .then((text) => {
+        mobileAboutContent.innerHTML =
+          typeof marked !== "undefined" ? marked.parse(text) : `<pre>${text}</pre>`;
+        mobileAboutContent.querySelectorAll("a").forEach((a) => {
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+        });
+        mobileAboutLoaded = true;
+      })
+      .catch(() => {
+        mobileAboutContent.innerHTML = "<p>Could not load content.</p>";
+      });
+  }
+  mobileAboutOpen = true;
+  mobileAboutOverlay.classList.add("open");
+  mobileAboutBtn.innerHTML = '<img src="assets/icons/arrow-left.png" alt="" aria-hidden="true" />';
+  mobileAboutBtn.setAttribute("aria-label", "Close about panel");
+}
+
+function closeMobileAbout() {
+  mobileAboutOpen = false;
+  mobileAboutOverlay.classList.remove("open");
+  mobileAboutBtn.innerHTML = '<img src="assets/icons/folder-root.png" alt="" aria-hidden="true" />';
+  mobileAboutBtn.setAttribute("aria-label", "Open about panel");
+}
+
+function toggleMobileAbout() {
+  if (mobileAboutOpen) closeMobileAbout();
+  else openMobileAbout();
+}
+
+if (mobileAboutBtn) mobileAboutBtn.addEventListener("click", toggleMobileAbout);

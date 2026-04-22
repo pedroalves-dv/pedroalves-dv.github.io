@@ -1,52 +1,142 @@
-<!DOCTYPE html>
+<!-- index.html -->
+
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio</title>
+    <title>Pedro Alves — Web Design &amp; Development</title>
+    <meta
+      name="description"
+      content="Portfolio of Pedro Alves, a web designer and developer crafting interactive interfaces, Next.js apps, and creative front-end experiences."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://pedroalves-dv.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pedroalves-dv.github.io/" />
+    <meta
+      property="og:title"
+      content="Pedro Alves — Web Design &amp; Development"
+    />
+    <meta
+      property="og:description"
+      content="Portfolio of Pedro Alves, a web designer and developer crafting interactive interfaces, Next.js apps, and creative front-end experiences."
+    />
+    <meta
+      property="og:image"
+      content="https://pedroalves-dv.github.io/assets/images/pixel_painter.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Pedro Alves — Web Design &amp; Development"
+    />
+    <meta
+      name="twitter:description"
+      content="Portfolio of Pedro Alves, a web designer and developer crafting interactive interfaces, Next.js apps, and creative front-end experiences."
+    />
+    <meta
+      name="twitter:image"
+      content="https://pedroalves-dv.github.io/assets/images/pixel_painter.jpg"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
     <script>
       if (localStorage.getItem("dark-mode") === "enabled") {
         document.documentElement.classList.add("dark-mode");
       }
     </script>
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
-    <!-- Nav -->
-    <div class="header">
-      <button id="darkModeToggle" class="dark-mode-toggle">
-        <img src="assets/images/light-mode.png" alt="Dark Mode Button" />
+    <!-- Mobile Header (visible only under 680px) -->
+    <header class="mobile-header" aria-label="Mobile site header">
+      <button class="mobile-logo" aria-label="Home">pedro_alves/</button>
+      <button
+        class="mobile-about-btn"
+        id="mobileAboutBtn"
+        aria-label="Open about panel"
+      >
+        <img src="assets/icons/folder-root.png" alt="" aria-hidden="true" />
       </button>
-      <button id="layoutToggle" class="layout-toggle">
-        <img src="assets/images/scattered.png" alt="Layout Toggle Button" />
-      </button>
-      <div class="separator"></div>
-      <a
-        class="header-link top-link"
-        href="https://github.com/pedroalves-dv"
-        alt="A link to my Github."
-        target="_blank"
-        >Github
-      </a>
-      <a
-        class="header-link top-link"
-        href="https://bright-camp-bc1.notion.site/UX-Case-Studies-Hub-1fb8f3a8d695801db885dd8732f1de1d?pvs=4"
-        alt="A link to my projects UX case studies page."
-        target="_blank"
-        >UX
-      </a>
-      <a
-        class="header-link top-link"
-        href="https://pedroalvesmadeira.tumblr.com/"
-        alt="A link to my Tumblr."
-        target="_blank"
-        >Tumblr
-      </a>
+    </header>
+
+    <!-- Mobile About Overlay -->
+    <div
+      class="mobile-about-overlay"
+      id="mobileAboutOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="About"
+    >
+      <div class="mobile-about-content" id="mobileAboutContent"></div>
     </div>
+
+    <h1 class="sr-only">Pedro Alves — Web Design &amp; Development</h1>
+
+    <!-- Floating Mode Toggle -->
+    <nav class="mode-toggle" role="toolbar" aria-label="View mode">
+      <button
+        class="mode-btn active"
+        data-mode="scatter"
+        tabindex="0"
+        aria-pressed="true"
+        title="Scatter mode — links float freely"
+      >
+        <img src="assets/icons/straight.png" alt="scatter" />
+      </button>
+      <button
+        class="mode-btn"
+        data-mode="list"
+        tabindex="-1"
+        aria-pressed="false"
+        title="List view — browse all projects"
+      >
+        <img src="assets/icons/scattered.png" alt="list" />
+      </button>
+      <div class="draw-btn-group">
+        <button
+          class="mode-btn"
+          data-mode="draw"
+          tabindex="0"
+          aria-pressed="false"
+          title="Draw mode — sketch on the canvas"
+        >
+          <img src="assets/icons/pencil-24-white.png" alt="draw" />
+        </button>
+        <button
+          data-mode="clear"
+          class="clear-canvas-btn"
+          id="clearCanvasBtn"
+          title="Clear canvas"
+          aria-label="Clear canvas"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"
+            />
+            <path d="M22 21H7" />
+            <path d="m5 11 9 9" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
     <!-- Canvas -->
     <div class="canvas-container">
       <canvas id="canvas"></canvas>
@@ -63,6 +153,7 @@
         Future improvements include enhanced export options and customizable
         workspace.(WIP)"
         target="_blank"
+        rel="noopener noreferrer"
         data-alt="Pixel Painter"
         >01</a
       >
@@ -70,39 +161,39 @@
       <a
         class="scattered-link"
         data-preview-id="preview-modal-link2"
-        rel="preload"
         data-screenshot="assets/images/meridian-time1.jpg"
         href="https://meridian-time.vercel.app/"
         data-description="Meridian is a modern web app for global teams and nomads to explore world time zones,
          local times, and business hours around the globe using Next.js. Features include a city search,
          local time display, managing multiple timezones in a customizable dashboard and an intuitive visual timeline"
         target="_blank"
+        rel="noopener noreferrer"
         data-alt="Meridian"
         >02</a
       >
       <a
         class="scattered-link"
         data-preview-id="preview-modal-link3"
-        rel="preload"
-        data-screenshot="assets/images/shop.png"
-        href="https://shop-tawny-iota-46.vercel.app/"
+        data-screenshot="assets/images/studiofile-1.png"
+        href="https://studiofile.vercel.app/"
         data-description="Next.js e-commerce application with Shopify integration,
         designed for a seamless and fully responsive online shopping experience. It features product
         listings, a shopping cart, and a user-friendly checkout process."
         target="_blank"
+        rel="noopener noreferrer"
         data-alt="Shop Prototype"
         >03</a
       >
       <a
         class="scattered-link"
         data-preview-id="preview-modal-link4"
-        rel="preload"
         data-screenshot="assets/images/swap-sense.png"
         href="https://pedroalves-dv.github.io/swap-sense/"
         data-description="Fully responsive currency conversion tool with a unique
         spending power feature. Designed for travelers and expats who want quick,
         real-time exchange rates and cost-of-living comparisons."
         target="_blank"
+        rel="noopener noreferrer"
         data-alt="Swap Sense"
         >04</a
       >
@@ -110,26 +201,26 @@
       <a
         class="scattered-link"
         data-preview-id="preview-modal-link5"
-        rel="preload"
         data-screenshot="assets/images/microgen.jpg"
         href="https://microgen.vercel.app/"
-        data-description="AI-powered SEO tool that generates comprehensive content briefs and full 
+        data-description="AI-powered SEO tool that generates comprehensive content briefs and full
         publish-ready articles from a single keyword. Built with Python FastAPI, Google Gemini, and Next.js."
         target="_blank"
+        rel="noopener noreferrer"
         data-alt="Microgen"
         >05</a
       >
 
       <a
         class="scattered-link"
-        data-preview-id="preview-modal-link5"
-        rel="preload"
+        data-preview-id="preview-modal-link6"
         data-screenshot="assets/images/rpg-ipad.png"
         href="https://pedroalves-dv.github.io/dragon-repeller/"
         data-description="Dragon Slayer is a browser-based role-playing game (RPG)
         developed using HTML, CSS, and JavaScript. Players navigate through various locations,
         engage in battles with monsters, and aim to defeat a dragon."
         target="_blank"
+        rel="noopener noreferrer"
         data-alt="Dragon Slayer"
         >06</a
       >
@@ -139,61 +230,110 @@
       <!-- Projects -->
       <div class="projects"></div>
       <!-- Info -->
-      <aside class="info">
-        <div class="title">
-          <!-- <h3>SELECTED PROJECTS</h3> -->
-          <!-- <p>2025</p> -->
-        </div>
-        <div class="text">
-          <!-- <p>
-            Versatile professional with a diverse background in both creative
-            and technical roles, I thrive on driving seamless customer
-            experience.
-            
-          </p> -->
-        </div>
-      </aside>
+      <aside class="info"></aside>
     </div>
-    <div class="linkedin">
-      <a
-        class="header-link"
-        href="https://www.linkedin.com/in/pedroalves-dv/"
-        alt="A link to my Linkedin profile."
-        target="_blank"
-      >
-        <div>
-          <span class="indent-link fade">Linkedin</span>
-          <span class="fade">Web Design & Development</span>
-          <span class="indent-link">PEDRO ALVES</span>
+    <!-- Left Panel -->
+    <aside class="left-panel" aria-label="Site navigation">
+      <div class="panel-title">
+        <button class="logo-name" aria-label="Home — scattered view">
+          pedro_alves/
+        </button>
+      </div>
+      <div class="file-tree">
+        <div class="tree-row tree-folder" data-folder="docs" data-open="true">
+          <span class="tree-label">docs</span>
         </div>
-      </a>
+        <div class="tree-children open" id="tree-docs">
+          <div
+            class="tree-row tree-file"
+            data-action="md"
+            data-md="/docs/about.md"
+          >
+            <span class="tree-label">about.md</span>
+          </div>
+          <div
+            class="tree-row tree-file"
+            data-action="md"
+            data-md="/docs/resume.md"
+          >
+            <span class="tree-label">resume.md</span>
+          </div>
+        </div>
+        <div
+          class="tree-row tree-folder"
+          data-folder="projects"
+          data-open="true"
+        >
+          <span class="tree-label">projects</span>
+        </div>
+        <div class="tree-children open" id="tree-projects">
+          <!-- Populated by JS from scattered link data -->
+        </div>
+        <div class="tree-row tree-folder" data-folder="links" data-open="true">
+          <span class="tree-label">links</span>
+        </div>
+        <div class="tree-children open" id="tree-links">
+          <div
+            class="tree-row tree-file"
+            data-action="url"
+            data-href="https://github.com/pedroalves-dv"
+          >
+            <span class="tree-label">github</span>
+          </div>
+          <div
+            class="tree-row tree-file"
+            data-action="url"
+            data-href="https://www.linkedin.com/in/pedroalves-dv/"
+          >
+            <span class="tree-label">linkedin</span>
+          </div>
+          <div
+            class="tree-row tree-file"
+            data-action="url"
+            data-href="https://pedroalvesmadeira.tumblr.com/"
+          >
+            <span class="tree-label">tumblr</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Canvas Viewer (markdown content) -->
+    <div class="canvas-viewer" id="canvasViewer">
+      <button
+        class="canvas-viewer-close"
+        id="canvasViewerClose"
+        aria-label="Close"
+      >
+        <img src="assets/icons/arrow-left.png" alt="" aria-hidden="true" />
+      </button>
+      <div class="canvas-viewer-content" id="canvasViewerContent"></div>
     </div>
 
     <!-- Project Preview Modal -->
 
     <div class="preview-modal hidden" id="preview-modal-link1">
-      
       <img
         class="preview-img"
         src="assets/images/pixel_painter.jpg"
-        alt="Preview 1"
+        alt="Pixel Painter — interactive pixel art drawing app screenshot"
         width="320"
+        loading="lazy"
       />
       <div class="preview-title">01—Pixel Painter</div>
       <p class="preview-text">
-        Interactive pixel art drawing application. Supports
-        click and drag, grid customization, preset functions, image to pixel and
-        eyedropper features.
+        Interactive pixel art drawing application. Supports click and drag, grid
+        customization, preset functions, image to pixel and eyedropper features.
       </p>
     </div>
 
     <div class="preview-modal hidden" id="preview-modal-link2">
-      
       <img
         class="preview-img"
         src="assets/images/meridian-time1.jpg"
-        alt="Preview 2"
+        alt="Meridian — global timezone visualizer app screenshot"
         width="320"
+        loading="lazy"
       />
       <div class="preview-title">02—Meridian</div>
       <p class="preview-text">
@@ -204,12 +344,12 @@
     </div>
 
     <div class="preview-modal hidden" id="preview-modal-link3">
-      
       <img
         class="preview-img"
-        src="assets/images/shop.png"
-        alt="Preview 3"
+        src="assets/images/studiofile-3.png"
+        alt="Shop Prototype — Next.js e-commerce app with Shopify screenshot"
         width="320"
+        loading="lazy"
       />
       <div class="preview-title">03—Shop Prototype</div>
       <p class="preview-text">
@@ -220,12 +360,12 @@
     </div>
 
     <div class="preview-modal hidden" id="preview-modal-link4">
-      
       <img
         class="preview-img"
         src="assets/images/swap-sense-white.png"
-        alt="Preview 4"
+        alt="Swap Sense — currency converter with spending power feature screenshot"
         width="320"
+        loading="lazy"
       />
       <div class="preview-title">04—SwapSense</div>
       <p class="preview-text">
@@ -236,36 +376,38 @@
     </div>
 
     <div class="preview-modal hidden" id="preview-modal-link5">
-      
       <img
         class="preview-img"
-        src="assets/images/microgen.jpg"
-        alt="Preview 5"
+        src="assets/images/microgen-2.png"
+        alt="Microgen — AI-powered SEO content generator screenshot"
         width="320"
+        loading="lazy"
       />
       <div class="preview-title">05—Microgen</div>
       <p class="preview-text">
-        AI-powered SEO tool that generates comprehensive content briefs and full 
-        publish-ready articles from a single keyword. Built with Python FastAPI, Google Gemini, and Next.js.
+        AI-powered SEO tool that generates comprehensive content briefs and full
+        publish-ready articles from a single keyword. Built with Python FastAPI,
+        Google Gemini, and Next.js.
       </p>
     </div>
 
     <div class="preview-modal hidden" id="preview-modal-link6">
-      
       <img
         class="preview-img"
         src="assets/images/rpg-ipad.png"
-        alt="Preview 6"
+        alt="Dragon Slayer — browser RPG game screenshot"
         width="320"
+        loading="lazy"
       />
       <div class="preview-title">06—Dragon Slayer</div>
       <p class="preview-text">
-        Browser-based role-playing game (RPG) developed using
-        HTML, CSS, and JavaScript. Players navigate through various locations,
-        engage in battles with monsters, and aim to defeat a dragon.
+        Browser-based role-playing game (RPG) developed using HTML, CSS, and
+        JavaScript. Players navigate through various locations, engage in
+        battles with monsters, and aim to defeat a dragon.
       </p>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
     <script src="/js/app.js"></script>
   </body>
 </html>
