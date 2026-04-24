@@ -4,7 +4,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const PANEL_W = 280;
+const PANEL_W = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--panel-w'), 10) || 420;
 
 function setCanvasSize() {
   const newW = window.innerWidth - PANEL_W;
@@ -59,7 +59,7 @@ canvas.addEventListener("mouseleave", () => (isDrawing = false));
 
 // ── Dark Mode — apply from localStorage ──────────────────────────────────────
 const html = document.documentElement;
-const isDarkMode = localStorage.getItem("dark-mode") === "enabled";
+let isDarkMode = localStorage.getItem("dark-mode") === "enabled";
 html.classList.toggle("dark-mode", isDarkMode);
 
 // ── Layout State ─────────────────────────────────────────────────────────────
@@ -99,10 +99,10 @@ function moveLinksToOverlay() {
 function generateGridPositions() {
   const gridCellWidth = 260;
   const gridCellHeight = 110;
-  const paddingTop = 30;
+  const paddingTop = 80;
   const paddingRight = 100;
   const paddingBottom = 200;
-  const paddingLeft = 310;    // 280px panel + 30px margin
+  const paddingLeft = PANEL_W + 30;
   const maxColumns = 5;
 
   const usableWidth = window.innerWidth - paddingLeft - paddingRight;
@@ -229,7 +229,11 @@ allLinks.forEach((link, idx) => {
 
           const others = Array.from(allLinks)
             .filter((l) => l !== link)
-            .map((l) => l.getBoundingClientRect());
+            .map((l) => {
+              const pos = assignedPositions.get(l);
+              if (pos) return { left: pos.x, top: pos.y, width: 60, height: 50 };
+              return l.getBoundingClientRect();
+            });
 
           let chosen = null;
           for (const c of candidates) {
@@ -270,7 +274,12 @@ allLinks.forEach((link, idx) => {
             } else {
               let best = null;
               let bestArea = Infinity;
-              for (const c of candidates) {
+              const nonOverlapping = candidates.filter(c => !rectsIntersect(
+                { left: c.left, top: c.top, width: mRect.width, height: mRect.height },
+                linkRect
+              ));
+              const pool = nonOverlapping.length > 0 ? nonOverlapping : candidates;
+              for (const c of pool) {
                 const candRect = { left: c.left, top: c.top, width: mRect.width, height: mRect.height };
                 let area = 0;
                 for (const o of others) area += overlapArea(candRect, o);
@@ -346,7 +355,6 @@ function enterDraw() {
   isDrawActive = true;
   document.body.classList.add("draw-mode");
   setCanvasSize();
-  hideCanvasViewer();
   if (currentPreviewModal) {
     currentPreviewModal.classList.remove("show");
     currentPreviewModal.classList.add("hidden");
@@ -379,8 +387,6 @@ function setMode(mode) {
     currentPreviewModal.classList.add("hidden");
     currentPreviewModal = null;
   }
-
-  hideCanvasViewer();
 
   if (mode === "list") {
     isStraightLayout = true;
@@ -438,7 +444,7 @@ const modeBtns = Array.from(document.querySelectorAll(".mode-btn"));
 
 function syncModeButtons(activeMode) {
   modeBtns.forEach((btn) => {
-    if (btn.dataset.mode === "draw") return; // draw has its own sync
+    if (btn.dataset.mode === "draw" || btn.dataset.mode === "darkmode") return;
     const isActive = btn.dataset.mode === activeMode;
     btn.classList.toggle("active", isActive);
     btn.setAttribute("aria-pressed", isActive ? "true" : "false");
@@ -453,9 +459,25 @@ function syncDrawButton() {
   drawBtn.setAttribute("aria-pressed", isDrawActive ? "true" : "false");
 }
 
+function syncDarkModeButton() {
+  const darkBtn = document.querySelector('.mode-btn[data-mode="darkmode"]');
+  if (!darkBtn) return;
+  darkBtn.classList.toggle("dark-active", isDarkMode);
+  darkBtn.setAttribute("aria-pressed", isDarkMode ? "true" : "false");
+}
+
+function toggleDarkMode() {
+  isDarkMode = !isDarkMode;
+  html.classList.toggle("dark-mode", isDarkMode);
+  localStorage.setItem("dark-mode", isDarkMode ? "enabled" : "disabled");
+  syncDarkModeButton();
+}
+
 modeBtns.forEach((btn) => {
   if (btn.dataset.mode === "draw") {
     btn.addEventListener("click", toggleDraw);
+  } else if (btn.dataset.mode === "darkmode") {
+    btn.addEventListener("click", toggleDarkMode);
   } else {
     btn.addEventListener("click", () => setMode(btn.dataset.mode));
   }
@@ -480,7 +502,7 @@ document.querySelector(".left-panel").addEventListener("mousedown", () => {
 });
 
 // Logo → reset to scattered home
-document.querySelector(".logo-name").addEventListener("click", () => {
+document.querySelector(".panel-section-label").addEventListener("click", () => {
   setMode("scatter");
 });
 
@@ -490,6 +512,7 @@ document.getElementById("clearCanvasBtn").addEventListener("click", () => {
 });
 
 // ── Initial position assignment ───────────────────────────────────────────────
+syncDarkModeButton();
 assignGridPositions();
 void main.offsetHeight;
 
@@ -510,103 +533,31 @@ allLinks.forEach((link) => {
   });
 });
 
-// ── Canvas Viewer (markdown) ──────────────────────────────────────────────────
-const canvasViewer = document.getElementById("canvasViewer");
-const canvasViewerContent = document.getElementById("canvasViewerContent");
-const canvasViewerClose = document.getElementById("canvasViewerClose");
+// ── Mobile Project List ───────────────────────────────────────────────────────
 
-function showCanvasViewer(html) {
-  canvasViewerContent.innerHTML = html;
-  canvasViewerContent.querySelectorAll("a").forEach((a) => {
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-  });
-  canvasViewer.classList.add("open");
-  if (currentPreviewModal) {
-    currentPreviewModal.classList.remove("show");
-    currentPreviewModal.classList.add("hidden");
-    currentPreviewModal = null;
-  }
-}
-
-function hideCanvasViewer() {
-  if (!canvasViewer.classList.contains("open")) return;
-  canvasViewer.classList.remove("open");
-  document.querySelectorAll(".tree-row.tree-active").forEach((r) => r.classList.remove("tree-active"));
-}
-
-canvasViewerClose.addEventListener("click", hideCanvasViewer);
-
-// ── File Tree ─────────────────────────────────────────────────────────────────
-
-// Populate projects/ from scattered link data
-function buildProjectTree() {
-  const container = document.getElementById("tree-projects");
+function buildMobileProjectList() {
+  const container = document.getElementById("mobileProjectList");
   if (!container) return;
   container.innerHTML = "";
   document.querySelectorAll("a.scattered-link").forEach((link) => {
-    const name = (link.getAttribute("data-alt") || "project")
-      .toLowerCase()
-      .replace(/\s+/g, "-");
-    const href = link.href;
-    const row = document.createElement("div");
-    row.className = "tree-row tree-file";
-    row.dataset.action = "url";
-    row.dataset.href = href;
-    row.innerHTML = `<span class="tree-label">${name}</span>`;
-    container.appendChild(row);
+    const card = document.createElement("a");
+    card.className = "mobile-card";
+    card.href = link.href;
+    card.target = "_blank";
+    card.rel = "noopener noreferrer";
+    card.innerHTML = `
+      <img src="${link.getAttribute("data-screenshot")}" alt="${link.getAttribute("data-alt")}" loading="lazy">
+      <span class="mobile-card-title">${link.getAttribute("data-alt")}</span>`;
+    container.appendChild(card);
   });
 }
 
-buildProjectTree();
-
-// Folder toggle
-document.querySelectorAll(".tree-folder").forEach((folder) => {
-  folder.addEventListener("click", () => {
-    const folderId = folder.dataset.folder;
-    const isOpen = folder.dataset.open === "true";
-    folder.dataset.open = isOpen ? "false" : "true";
-    const children = document.getElementById(`tree-${folderId}`);
-    if (children) children.classList.toggle("open", !isOpen);
-  });
-});
-
-// File/root clicks (delegated)
-document.addEventListener("click", (e) => {
-  const row = e.target.closest(".tree-row");
-  if (!row) return;
-  const action = row.dataset.action;
-  if (action === "scatter") {
-    setMode("scatter");
-    hideCanvasViewer();
-  } else if (action === "md") {
-    const mdPath = row.dataset.md;
-    if (!mdPath) return;
-    document.querySelectorAll(".tree-row.tree-active").forEach((r) => r.classList.remove("tree-active"));
-    row.classList.add("tree-active");
-    fetch(mdPath)
-      .then((r) => r.text())
-      .then((text) => {
-        const html = typeof marked !== "undefined"
-          ? marked.parse(text)
-          : `<pre>${text}</pre>`;
-        showCanvasViewer(html);
-      })
-      .catch(() => showCanvasViewer("<p>Could not load file.</p>"));
-  } else if (action === "url") {
-    const href = row.dataset.href;
-    if (href) window.open(href, "_blank", "noopener,noreferrer");
-  }
-});
+buildMobileProjectList();
 
 // ── Escape key ────────────────────────────────────────────────────────────────
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
-  if (isDrawActive) {
-    exitDraw();
-  } else if (canvasViewer.classList.contains("open")) {
-    hideCanvasViewer();
-  }
+  if (isDrawActive) exitDraw();
 });
 
 // ── Mobile Layout ─────────────────────────────────────────────────────────────
@@ -638,6 +589,8 @@ function setMobileLayout() {
 // Force straight layout when resizing below 1200px while in scatter mode
 window.addEventListener("resize", () => {
   if (isMobile() && currentMode === "scatter") {
+    currentMode = "list";
+    syncModeButtons("list");
     isStraightLayout = true;
     straightLayoutContainer.classList.remove("hidden");
     straightLayoutContainer.classList.add("fade-in");
@@ -653,46 +606,3 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("DOMContentLoaded", setMobileLayout);
 
-// ── Mobile About Overlay ──────────────────────────────────────────────────────
-const mobileAboutBtn = document.getElementById("mobileAboutBtn");
-const mobileAboutOverlay = document.getElementById("mobileAboutOverlay");
-const mobileAboutContent = document.getElementById("mobileAboutContent");
-let mobileAboutLoaded = false;
-let mobileAboutOpen = false;
-
-function openMobileAbout() {
-  if (!mobileAboutLoaded) {
-    fetch("/docs/about.md")
-      .then((r) => r.text())
-      .then((text) => {
-        mobileAboutContent.innerHTML =
-          typeof marked !== "undefined" ? marked.parse(text) : `<pre>${text}</pre>`;
-        mobileAboutContent.querySelectorAll("a").forEach((a) => {
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-        });
-        mobileAboutLoaded = true;
-      })
-      .catch(() => {
-        mobileAboutContent.innerHTML = "<p>Could not load content.</p>";
-      });
-  }
-  mobileAboutOpen = true;
-  mobileAboutOverlay.classList.add("open");
-  mobileAboutBtn.innerHTML = '<img src="assets/icons/arrow-left.png" alt="" aria-hidden="true" />';
-  mobileAboutBtn.setAttribute("aria-label", "Close about panel");
-}
-
-function closeMobileAbout() {
-  mobileAboutOpen = false;
-  mobileAboutOverlay.classList.remove("open");
-  mobileAboutBtn.innerHTML = '<img src="assets/icons/folder-root.png" alt="" aria-hidden="true" />';
-  mobileAboutBtn.setAttribute("aria-label", "Open about panel");
-}
-
-function toggleMobileAbout() {
-  if (mobileAboutOpen) closeMobileAbout();
-  else openMobileAbout();
-}
-
-if (mobileAboutBtn) mobileAboutBtn.addEventListener("click", toggleMobileAbout);

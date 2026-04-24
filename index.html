@@ -55,29 +55,6 @@
   </head>
 
   <body>
-    <!-- Mobile Header (visible only under 680px) -->
-    <header class="mobile-header" aria-label="Mobile site header">
-      <button class="mobile-logo" aria-label="Home">pedro_alves/</button>
-      <button
-        class="mobile-about-btn"
-        id="mobileAboutBtn"
-        aria-label="Open about panel"
-      >
-        <img src="assets/icons/folder-root.png" alt="" aria-hidden="true" />
-      </button>
-    </header>
-
-    <!-- Mobile About Overlay -->
-    <div
-      class="mobile-about-overlay"
-      id="mobileAboutOverlay"
-      role="dialog"
-      aria-modal="true"
-      aria-label="About"
-    >
-      <div class="mobile-about-content" id="mobileAboutContent"></div>
-    </div>
-
     <h1 class="sr-only">Pedro Alves — Web Design &amp; Development</h1>
 
     <!-- Floating Mode Toggle -->
@@ -99,6 +76,15 @@
         title="List view — browse all projects"
       >
         <img src="assets/icons/scattered.png" alt="list" />
+      </button>
+      <button
+        class="mode-btn"
+        data-mode="darkmode"
+        tabindex="-1"
+        aria-pressed="false"
+        title="Dark mode — toggle dark theme"
+      >
+        <img src="assets/icons/dark-mode-icon.png" alt="dark mode" />
       </button>
       <div class="draw-btn-group">
         <button
@@ -234,81 +220,60 @@
     </div>
     <!-- Left Panel -->
     <aside class="left-panel" aria-label="Site navigation">
-      <div class="panel-title">
-        <button class="logo-name" aria-label="Home — scattered view">
-          pedro_alves/
+      <div class="panel-about">
+        <button class="panel-section-label" aria-label="Home — scattered view">
+          PEDRO ALVES
         </button>
+        <p class="panel-about-text">
+          Designer with a developer's toolkit — working across interface design,
+          web applications, and creative front-end development. Fluent
+          in&nbsp;FR/EN/PT.
+        </p>
       </div>
-      <div class="file-tree">
-        <div class="tree-row tree-folder" data-folder="docs" data-open="true">
-          <span class="tree-label">docs</span>
-        </div>
-        <div class="tree-children open" id="tree-docs">
-          <div
-            class="tree-row tree-file"
-            data-action="md"
-            data-md="/docs/about.md"
-          >
-            <span class="tree-label">about.md</span>
-          </div>
-          <div
-            class="tree-row tree-file"
-            data-action="md"
-            data-md="/docs/resume.md"
-          >
-            <span class="tree-label">resume.md</span>
-          </div>
-        </div>
-        <div
-          class="tree-row tree-folder"
-          data-folder="projects"
-          data-open="true"
+      <div class="panel-about">
+        <span class="panel-section-label">CONTACT</span>
+        <p class="panel-about-text">pedroalves.dv@gmail.com</p>
+        <p class="panel-about-text">+33 6 60 77 34 15</p>
+      </div>
+      <div class="panel-links">
+        <a
+          href="https://github.com/pedroalves-dv"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="panel-link"
+          >github</a
         >
-          <span class="tree-label">projects</span>
-        </div>
-        <div class="tree-children open" id="tree-projects">
-          <!-- Populated by JS from scattered link data -->
-        </div>
-        <div class="tree-row tree-folder" data-folder="links" data-open="true">
-          <span class="tree-label">links</span>
-        </div>
-        <div class="tree-children open" id="tree-links">
-          <div
-            class="tree-row tree-file"
-            data-action="url"
-            data-href="https://github.com/pedroalves-dv"
-          >
-            <span class="tree-label">github</span>
-          </div>
-          <div
-            class="tree-row tree-file"
-            data-action="url"
-            data-href="https://www.linkedin.com/in/pedroalves-dv/"
-          >
-            <span class="tree-label">linkedin</span>
-          </div>
-          <div
-            class="tree-row tree-file"
-            data-action="url"
-            data-href="https://pedroalvesmadeira.tumblr.com/"
-          >
-            <span class="tree-label">tumblr</span>
-          </div>
-        </div>
+        <a
+          href="https://www.linkedin.com/in/pedroalves-dv/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="panel-link"
+          >linkedin</a
+        >
+        <a
+          href="https://pedroalvesmadeira.tumblr.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="panel-link"
+          >tumblr</a
+        >
+        <a
+          href="assets/pedro-alves-resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="panel-link panel-link--resume"
+          >resume
+          <img
+            src="assets/icons/arrow-up-right.png"
+            alt=""
+            aria-hidden="true"
+            class="panel-link-icon"
+        /></a>
       </div>
     </aside>
 
-    <!-- Canvas Viewer (markdown content) -->
-    <div class="canvas-viewer" id="canvasViewer">
-      <button
-        class="canvas-viewer-close"
-        id="canvasViewerClose"
-        aria-label="Close"
-      >
-        <img src="assets/icons/arrow-left.png" alt="" aria-hidden="true" />
-      </button>
-      <div class="canvas-viewer-content" id="canvasViewerContent"></div>
-    </div>
+    <!-- Mobile project list (populated by JS, visible only on mobile) -->
+    <div class="mobile-project-list" id="mobileProjectList"></div>
 
     <!-- Project Preview Modal -->
 
@@ -367,7 +332,7 @@
         width="400"
         loading="lazy"
       />
-      <div class="preview-title">04—SwapSense</div>
+      <div class="preview-title">04—Swap Sense</div>
       <p class="preview-text">
         Fully responsive currency conversion tool with a unique spending power
         feature. Designed for travelers and expats who want quick, real-time

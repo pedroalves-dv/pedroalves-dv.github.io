@@ -2,8 +2,7 @@
 
 Trilingual Operations & Technical Solutions Specialist
 
-pedroalves.dv[at]gmail[dot]com · LinkedIn(link) · GitHub(link) · Portfolio(link)
-Based in Paris / Porto · Open to Remote
+pedroalves.dv[at]gmail[dot]com | LinkedIn / GitHub / Portfolio | Based in Paris / Porto | Open to Remote
 
 Versatile professional with over a decade of experience bridging the gap between creative vision, operational excellence, and technical execution. Expert in scaling multilingual workflows, automating processes with AI, and building full-stack applications. Proven track record of leading high-stakes projects—from award-winning 3D experiences at FoST to AI-driven SEO platforms. I thrive in fast-paced, international environments where precision and clear communication are paramount.
 
@@ -12,7 +11,7 @@ Versatile professional with over a decade of experience bridging the gap between
 - Languages: French (Native) · English (Fluent) · Portuguese (Fluent) · Spanish (Conversational)
 - Development: JavaScript, TypeScript, React, Next.js, Node.js, Python, FastAPI, REST APIs
 - AI & Automation: Prompt Engineering, LLM API Integration, AI-assisted workflow design
-- Operations & Tools: CRM Management, QA Leadership, Agile/Scrum, Notion, Trello, Figma, Adobe Suite
+- Operations & Tools: CRM Management, Agile/Scrum, Notion, Trello, Figma, Adobe Suite
 
 ## EXPERIENCE
 
