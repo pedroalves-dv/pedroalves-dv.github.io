@@ -194,22 +194,23 @@ allLinks.forEach((link, idx) => {
             return Math.max(min, Math.min(max, v));
           }
 
+          const maxTop = Math.max(10, window.innerHeight - mRect.height - 10);
           const candidates = [];
           candidates.push({
             left: clamp(linkRect.right + margin, PANEL_W + 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10),
+            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, maxTop),
           });
           candidates.push({
             left: clamp(linkRect.left - mRect.width - margin, PANEL_W + 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, window.innerHeight - mRect.height - 10),
+            top: clamp(linkRect.top + (linkRect.height - mRect.height) / 2, 10, maxTop),
           });
           candidates.push({
             left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, PANEL_W + 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.top - mRect.height - margin, 10, window.innerHeight - mRect.height - 10),
+            top: clamp(linkRect.top - mRect.height - margin, 10, maxTop),
           });
           candidates.push({
             left: clamp(linkRect.left + (linkRect.width - mRect.width) / 2, PANEL_W + 10, window.innerWidth - mRect.width - 10),
-            top: clamp(linkRect.bottom + margin, 10, window.innerHeight - mRect.height - 10),
+            top: clamp(linkRect.bottom + margin, 10, maxTop),
           });
 
           function rectsIntersect(a, b) {
@@ -229,11 +230,7 @@ allLinks.forEach((link, idx) => {
 
           const others = Array.from(allLinks)
             .filter((l) => l !== link)
-            .map((l) => {
-              const pos = assignedPositions.get(l);
-              if (pos) return { left: pos.x, top: pos.y, width: 60, height: 50 };
-              return l.getBoundingClientRect();
-            });
+            .map((l) => l.getBoundingClientRect());
 
           let chosen = null;
           for (const c of candidates) {
@@ -562,7 +559,7 @@ document.addEventListener("keydown", (e) => {
 
 // ── Mobile Layout ─────────────────────────────────────────────────────────────
 function isMobile() {
-  return window.innerWidth <= 1200;
+  return window.innerWidth <= 1440;
 }
 
 function setMobileLayout() {
@@ -586,7 +583,7 @@ function setMobileLayout() {
   }
 }
 
-// Force straight layout when resizing below 1200px while in scatter mode
+// Force straight layout when resizing below 1440px while in scatter mode
 window.addEventListener("resize", () => {
   if (isMobile() && currentMode === "scatter") {
     currentMode = "list";
