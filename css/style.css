@@ -233,10 +233,13 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Draw mode — raise canvas above content, show crosshair */
+/* Draw mode — raise canvas above all content, intercept all pointer events */
 body.draw-mode .canvas-container {
+  display: block !important;
   z-index: 10000;
   cursor: crosshair;
+  pointer-events: auto;
+  will-change: transform;
 }
 
 .overlay-links {
@@ -357,11 +360,14 @@ html.dark-mode .panel-link-icon {
 .canvas-container {
   position: fixed;
   top: 0;
-  left: var(--panel-w);
-  width: calc(100vw - var(--panel-w));
+  left: 0;
+  width: 100vw;
   height: 100vh;
   z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
 }
+
 
 /* ========================================================================== */
 /* Main Links (Scattered Layout) */
@@ -444,7 +450,7 @@ main a:hover {
   flex-direction: column;
   justify-content: center;
   margin-bottom: 60px;
-  width: 500px;
+  max-width: 560px;
 }
 
 h3 {
@@ -477,6 +483,10 @@ p {
 .hidden {
   pointer-events: none;
   opacity: 0;
+}
+
+.straight-layout-container.hidden {
+  visibility: hidden;
 }
 
 /* ========================================================================== */
@@ -547,9 +557,6 @@ p {
   .scattered-layout {
     display: none !important;
   }
-  .canvas-container {
-    display: none;
-  }
   .mode-toggle [data-mode="scatter"],
   .mode-toggle [data-mode="list"] {
     display: none !important;
@@ -560,10 +567,6 @@ p {
   }
   .card {
     width: 100%;
-  }
-  .projects {
-    padding: 0px 24px;
-    max-width: 760px;
   }
 }
 
@@ -685,6 +688,10 @@ p {
   .canvas-container,
   .mode-toggle,
   .preview-modal {
+    display: none !important;
+  }
+
+  body.draw-mode .canvas-container {
     display: none !important;
   }
 }

@@ -7,8 +7,8 @@ const ctx = canvas.getContext("2d");
 const PANEL_W = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--panel-w'), 10) || 420;
 
 function setCanvasSize() {
-  const newW = window.innerWidth - PANEL_W;
-  const newH = window.innerHeight;
+  const newW = Math.max(window.innerWidth, canvas.width || 0);
+  const newH = Math.max(window.innerHeight, canvas.height || 0);
   if (canvas.width === newW && canvas.height === newH) return;
 
   const off = document.createElement("canvas");
@@ -36,13 +36,15 @@ const colors = [
 ];
 
 canvas.addEventListener("mousedown", (event) => {
+  if (!isDrawActive) return;
   isDrawing = true;
   ctx.beginPath();
   ctx.lineWidth = 50;
   ctx.lineCap = "round";
+  ctx.lineJoin = "round";
   ctx.strokeStyle = colors[Math.floor(Math.random() * colors.length)];
-  ctx.shadowBlur = 30;
   ctx.shadowColor = ctx.strokeStyle;
+  ctx.shadowBlur = 18;
   ctx.moveTo(event.offsetX, event.offsetY);
 });
 
@@ -487,11 +489,6 @@ modeBtns.forEach((btn) => {
     }
     if (next) { next.focus(); next.click(); }
   });
-});
-
-// Exit draw when clicking the left panel
-document.querySelector(".left-panel").addEventListener("mousedown", () => {
-  if (isDrawActive) exitDraw();
 });
 
 // Logo → reset to scattered home
