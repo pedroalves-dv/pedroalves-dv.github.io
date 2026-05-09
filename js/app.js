@@ -67,7 +67,6 @@ let allLinks = document.querySelectorAll("a.scattered-link");
 const main = document.querySelector("main");
 const straightLayoutContainer = document.querySelector(".straight-layout-container");
 const projects = document.querySelector(".projects");
-const info = document.querySelector(".info");
 let isStraightLayout = false;
 let currentMode = "scatter"; // "scatter" | "list" — the layout mode, never "draw"
 let isDrawActive = false;    // draw overlay is independent of layout mode
@@ -340,11 +339,9 @@ function populateStraightLayout() {
 
   requestAnimationFrame(() => {
     projects.classList.add("fade-in");
-    info.classList.add("fade-in");
   });
 
   straightLayoutContainer.appendChild(projects);
-  straightLayoutContainer.appendChild(info);
 }
 
 // ── Draw Overlay ──────────────────────────────────────────────────────────────
@@ -400,7 +397,6 @@ function setMode(mode) {
     if (isStraightLayout) {
       isStraightLayout = false;
       projects.classList.remove("fade-in");
-      info.classList.remove("fade-in");
       straightLayoutContainer.classList.add("hidden");
       main.classList.remove("hidden");
       main.classList.add("fade-in");
@@ -518,6 +514,8 @@ allLinks.forEach((link) => {
     "transform 600ms cubic-bezier(.2,.9,.2,1), color 200ms linear, opacity 600ms cubic-bezier(.2,.9,.2,1)";
 });
 
+setMode("list");
+
 // ── Shuffle cooldown ──────────────────────────────────────────────────────────
 let canShuffle = true;
 
@@ -572,9 +570,7 @@ function setMobileLayout() {
     main.classList.add("hidden");
     isStraightLayout = true;
     populateStraightLayout();
-    info.style.display = "none";
   } else {
-    info.style.display = "";
     if (!isStraightLayout) {
       straightLayoutContainer.classList.add("hidden");
       main.classList.remove("hidden");
@@ -597,7 +593,6 @@ window.addEventListener("resize", () => {
     overlayLinks.style.zIndex = "0";
     document.body.style.overflow = "auto";
     populateStraightLayout();
-    info.style.display = "none";
   }
 });
 

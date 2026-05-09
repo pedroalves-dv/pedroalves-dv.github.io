@@ -409,11 +409,11 @@ main a:hover {
   flex-direction: row;
   justify-content: start;
   align-items: start;
-  gap: 10px;
   background: none;
   pointer-events: none;
   padding-top: 15px;
   padding-left: var(--panel-w);
+  width: fit-content;
 }
 
 .projects {
@@ -437,20 +437,6 @@ main a:hover {
 .projects a {
   text-decoration: none;
   color: var(--toggle-text-color);
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: end;
-  gap: 20px;
-  padding: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  height: auto;
-  width: 360px;
 }
 
 .card {

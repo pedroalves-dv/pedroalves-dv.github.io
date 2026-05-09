@@ -61,21 +61,21 @@
     <nav class="mode-toggle" role="toolbar" aria-label="View mode">
       <button
         class="mode-btn active"
-        data-mode="scatter"
+        data-mode="list"
         tabindex="0"
         aria-pressed="true"
-        title="Scatter mode — links float freely"
-      >
-        <img src="assets/icons/straight.png" alt="scatter" />
-      </button>
-      <button
-        class="mode-btn"
-        data-mode="list"
-        tabindex="-1"
-        aria-pressed="false"
         title="List view — browse all projects"
       >
         <img src="assets/icons/scattered.png" alt="list" />
+      </button>
+      <button
+        class="mode-btn"
+        data-mode="scatter"
+        tabindex="-1"
+        aria-pressed="false"
+        title="Scatter mode — links float freely"
+      >
+        <img src="assets/icons/straight.png" alt="scatter" />
       </button>
       <button
         class="mode-btn"
@@ -216,10 +216,7 @@
     </main>
     <!-- Straight Layout -->
     <div class="straight-layout-container hidden">
-      <!-- Projects -->
       <div class="projects"></div>
-      <!-- Info -->
-      <aside class="info"></aside>
     </div>
     <!-- Left Panel -->
     <aside class="left-panel" aria-label="Site navigation">
@@ -236,7 +233,7 @@
       <div class="panel-about">
         <span class="panel-section-label">CONTACT</span>
         <p class="panel-about-text">pedroalves.dv@gmail.com</p>
-        <p class="panel-about-text">+33 6 60 77 34 15</p>
+        <p class="panel-about-text">+33 6 69 77 34 15</p>
       </div>
       <div class="panel-links">
         <a
